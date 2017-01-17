@@ -14,6 +14,7 @@ use constant S_BOARD_MODE => 'Board index';
 use constant S_THREAD_MODE => 'Thread view';
 use constant S_RETURN => 'Return to board index';				# Back from reply mode
 use constant S_RETREF => 'Revisit previous page';				# Back from error
+use constant S_ADMIN_PANEL_LINK => 'Manage';
 
 use constant S_NAME => 'Name';							# Describes name field
 use constant S_EMAIL => 'Link';							# Describes e-mail field
@@ -246,6 +247,8 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 </td></tr></tbody></table>
 
+[<a href="<var expand_filename('admin.pl')>"><const S_ADMIN_PANEL_LINK></a>]
+
 }.NORMAL_FOOT_INCLUDE,KEEP_MAINPAGE_NEWLINES);
 
 
@@ -334,6 +337,8 @@ use constant THREAD_FOOT_TEMPLATE => compile_template(q{
 	</div>
 </form>
 
+[<a href="<var expand_filename('admin.pl')>?<var $thread>"><const S_ADMIN_PANEL_LINK></a>]
+
 }.NORMAL_FOOT_INCLUDE);
 
 
@@ -371,7 +376,7 @@ use constant REPLY_TEMPLATE => compile_template( q{
 	<if $useragent><label title="<var $useragent>"></if>
 	<if !$useragent><label></if>
 		<input type="checkbox" name="delete" value="<var $thread>,<var $num>" />
-		<span class="filetitle"><var $title></span>
+		<span class="posttitle"><var $title></span>
 		<if $link>
 			<span class="postername"><a href="<var $link>"><var $name></a></span>
 			<if $trip>
@@ -412,9 +417,9 @@ use constant REPLY_TEMPLATE => compile_template( q{
 	<if $useragent><label title="<var $useragent>"></if>
 	<if !$useragent><label></if>
 		<input type="checkbox" name="delete" value="<var $thread>,<var $num>" />
-		<span class="replytitle"><var $title></span>
+		<span class="posttitle"><var $title></span>
 		<if $link>
-			<span class="commentpostername"><a href="<var $link>"><var $name></a></span>
+			<span class="postername"><a href="<var $link>"><var $name></a></span>
 			<if $trip><span class="postertrip">
 				<a href="<var $link>">
 					<if !$capped><var $trip></if>
@@ -423,7 +428,7 @@ use constant REPLY_TEMPLATE => compile_template( q{
 			</if>
 		</if>
 		<if !$link>
-			<span class="commentpostername"><var $name></span>
+			<span class="postername"><var $name></span>
 			<if $trip>
 				<span class="postertrip">
 					<if !$capped><var $trip></if>

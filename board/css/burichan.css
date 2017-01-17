@@ -1,23 +1,21 @@
 .adminbar {text-align: right; background: inherit; clear: both; float: right;}
-.commentpostername {background: inherit; font-size: 12px; font-family: serif; color: #174; font-weight: 800;}
 .delbuttons {background: inherit; text-align: center; padding-bottom: 4px;}
 .dellist {background: inherit; text-align: center;}
 .doubledash {vertical-align: top; clear: both; float: left;}
 .filesize {font-size: 12px; font-family: sans-serif; text-decoration: underline; padding-left: 3em;}
-.filetitle {background: inherit; font-size: 18px; font-family: serif; color: #0f0c5d; font-weight: 800;}
 .footer {font-size: 10px; font-family: sans-serif;}
 .logo {clear: both; text-align: center; background: inherit; font-size: 24pt; color: #af0a0f; width: 100%;}
 .managehead {background: #0f8fe1; color: #000; font-family: sans-serif; font-size: 14px; padding: 0px;}
-.oldpost {background: inherit; font-size: 18px; font-family: serif; color: #0f0c5d; font-weight: 800;}
-.omittedposts {background: inherit; font-size: 18px; font-family: serif; color: #070707; font-weight: 800;}
+.oldpost {background: inherit; font-size: 18px; font-family: serif; color: #0f0c5d; font-weight: bold;}
+.omittedposts {background: inherit; font-size: 18px; font-family: serif; color: #070707; font-weight: bold;}
 .passvalid {background: #98e; text-align: center; width: 100%; color: #fff;}
 .postarea {background: inherit;}
-.postblock {background: #98e; color: #000; font-weight: 800;}
-.postername {background: inherit; font-size: 12px; font-family: serif; color: #174; font-weight: 800;}
+.postblock {background: #98e; color: #000; font-weight: bold;}
+.postername {background: inherit; font-size: 12px; font-family: serif; color: #174; font-weight: bold;}
 .postlists {background: #fff; width: 100%; padding: 0px; color: #000;}
+.posttitle {background: inherit; font-size: 18px; font-family: serif; color: #0f0c5d; font-weight: bold;}
 .reply {background: #d6daf0; color: #000; font-family: serif;}
 .reply:target {background: #cdf;}
-.replytitle {background: inherit; font-size: 18px; font-family: serif; color: #0f0c5d; font-weight: 800;}
 .row1 {font-family: sans-serif; font-size: 12px; color: #000; background: #9ad2f6;}
 .row2 {font-family: sans-serif; font-size: 12px; color: #000; background: #fff;}
 .rules {font-size: 10px; font-family: sans-serif;}

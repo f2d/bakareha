@@ -21,6 +21,7 @@ BEGIN {
 	eval "use constant THREADS_DISPLAYED => 10" unless(defined &THREADS_DISPLAYED);
 	eval "use constant THREADS_LISTED => 40" unless(defined &THREADS_LISTED);
 	eval "use constant REPLIES_PER_THREAD => 10" unless(defined &REPLIES_PER_THREAD);
+	eval "use constant S_ADMIN_CONTACT_LINK => ''" unless(defined &S_ADMIN_CONTACT_LINK);
 	eval "use constant S_ANONAME => 'Anonymous'" unless(defined &S_ANONAME);
 	eval "use constant DEFAULT_STYLE => 'Futaba'" unless(defined &DEFAULT_STYLE);
 

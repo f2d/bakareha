@@ -1,4 +1,5 @@
 <ul>
+<li>Dollchan Extension users: exclude this board if you have problems with it.</li>
 <li>Supported file types are: <var get_filetypes()>.</li>
 <li>Maximum file size allowed is <const MAX_KB> KB, maximum image size is <const MAX_IMAGE_WIDTH> x <const MAX_IMAGE_HEIGHT>.</li>
 <li>Images greater than <const MAX_W>x<const MAX_H> pixels will be thumbnailed.</li>
@@ -16,5 +17,5 @@
 	<span class="unkfunc">&gt;quote</span>,
 	<span class="spoiler">%%spoiler%%</span>.
 </li>
-<!--li>E-mail for private matters: <a href="mailto:admin@localhost">admin@localhost</a></li-->
+<if S_ADMIN_CONTACT_LINK><li>E-mail for private matters: <a href="mailto:<const S_ADMIN_CONTACT_LINK>"><const S_ADMIN_CONTACT_LINK></a></li></if>
 </ul>

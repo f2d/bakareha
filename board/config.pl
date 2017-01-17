@@ -23,6 +23,7 @@ use constant TITLE => 'Feedback and help';	# Name of this image board
 #use constant THREADS_DISPLAYED => 10;		# Number of threads on the front page
 #use constant THREADS_LISTED => 40;		# Number of threads in the thread list
 #use constant REPLIES_PER_THREAD => 10;		# Replies shown
+#use constant S_ADMIN_CONTACT_LINK => 'admin@'.$ENV{HTTP_HOST};
 #use constant S_ANONAME => 'Anonymous';		# Defines what to print if there is no text entered in the name field
 use constant S_HOME_PATH => '/';
 use constant S_BOARD_PATH => '/board/';
