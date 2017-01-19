@@ -93,20 +93,20 @@ use constant NORMAL_HEAD_INCLUDE => q{
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>
-	<const TITLE>
-	<if $title> &mdash; <var $title></if>
-	<if $titletime> &mdash; <var $titletime></if>
-</title>
-<meta http-equiv="Content-Type" content="text/html;charset=<const CHARSET>" />
-<link rel="shortcut icon" href="<const expand_filename(FAVICON)>" />
-<link rel="stylesheet" type="text/css" href="<const expand_filename_time(CSS_FILE)>" />
+	<meta http-equiv="Content-Type" content="text/html;charset=<const CHARSET>" />
+	<title>
+		<const TITLE>
+		<if $title> &mdash; <var $title></if>
+		<if $titletime> &mdash; <var $titletime></if>
+	</title>
+	<link rel="shortcut icon" href="<const expand_filename(FAVICON)>" />
+	<link rel="stylesheet" type="text/css" href="<const expand_filename_time(CSS_FILE)>" />
 
-<loop $stylesheets>
-<link rel="<if !$default>alternate </if>stylesheet" type="text/css" href="<var expand_filename_time($filename)>" title="<var $title>" />
-</loop>
+	<loop $stylesheets>
+		<link rel="<if !$default>alternate </if>stylesheet" type="text/css" href="<var expand_filename_time($filename)>" title="<var $title>" />
+	</loop>
 
-<script type="text/javascript">var style_cookie="<const STYLE_COOKIE>";</script>
+	<script type="text/javascript">var style_cookie="<const STYLE_COOKIE>";</script>
 </head>
 <if $thread><body class="replypage"></if>
 <if !$thread><body class="mainpage"></if>

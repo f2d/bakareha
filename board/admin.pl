@@ -27,42 +27,12 @@ use constant ENCODED_PASS => encode_admin_pass(ADMIN_PASS);
 use constant ADMIN_HEAD_INCLUDE => q{<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=<const CHARSET>" />
-<title>Admin interface for <const TITLE></title>
-<style type="text/css">
-html, body { background: #eef; }
-a { color: #702; }
-a:hover { background: #d13; color: #eef; }
-
-#threadlist a { display: block; }
-th { text-align: left; }
-
-#deletecontrols { float: right; }
-
-h2 { font-size: 1.2em; margin: 2em 0 0.5em 0; padding: 0; font-family: sans-serif; }
-h2 a { text-decoration: none; color: #000; }
-h2 a:hover { text-decoration: underline; }
-
-.post { border: 1px solid #79c; background: #e7e7ff; padding: 0; margin-bottom: 0.3em; clear: both; }
-.postcommands { margin: 0; padding: 3px; background: #ccddff; font-family: sans-serif; }
-h3 { font-size: 1em; margin: 0; padding: 0px; font-family: sans-serif; }
-.posttext { padding: 0.5em 2em; }
-.posttext a { color: #5ae; }
-.posttext a:hover { background: #5ae; color: #eef; }
-
-.deletebutton { display:none; }
-</style>
-<script type="text/javascript">
-function banclick(link)
-{
-	var r=prompt("What's the reason for this ban?");
-	if(r) document.location=link.href+"&reason="+encodeURIComponent(r);
-	return false;
-}
-</script>
+	<meta http-equiv="Content-Type" content="text/html;charset=<const CHARSET>" />
+	<title><var $admin_title or Login></title>
+	<link rel="stylesheet" type="text/css" href="<const expand_filename_time('admin.css')>" />
 </head>
 <body>
-<h1>Admin interface for <const TITLE></h1>
+<if $admin_title><h1><var $admin_title></h1></if>
 };
 
 use constant THREAD_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
@@ -98,29 +68,34 @@ Edit: <loop $editable>
 <label><input type="checkbox" name="fileonly" value="on" />File only</label>
 </div>
 
+<script type="text/javascript">
+function banclick(link)
+{
+	var r=prompt("What's the reason for this ban?");
+	if(r) document.location=link.href+"&reason="+encodeURIComponent(r);
+	return false;
+}
+</script>
+
 <loop $shownthreads>
 	<h2><a href="<var $self>?<var $thread>"><var $title or "Thread $thread"> (<var $postcount> posts)</a></h2>
 
 	<div class="threadcommands">
-	<if !$permasage><a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=1&amp;&amp;admin=<var $adminpass>&amp;r=1">permasage thread</a></if>
-	<if $permasage><a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=0&amp;&amp;admin=<var $adminpass>&amp;r=1">unpermasage thread</a></if>
-	-
-	<if !$closed><a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=1&amp;&amp;admin=<var $adminpass>&amp;r=1">close thread</a></if>
-	<if $closed><a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=0&amp;&amp;admin=<var $adminpass>&amp;r=1">open thread</a></if>
-	-
-	<a href="<var $path><const KAREHA_SCRIPT>?task=deletethread&amp;thread=<var $thread>&amp;&amp;admin=<var $adminpass>&amp;r=1">delete thread</a>
+		<a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=<if !$permasage>1</if><if $permasage>0</if>&amp;&amp;admin=<var $adminpass>&amp;r=1"><if $permasage>un</if>permasage thread</a>
+	-	<a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=<if !$closed>1</if><if $closed>0</if>&amp;&amp;admin=<var $adminpass>&amp;r=1"><if $closed>un</if>close thread</a>
+	-	<a href="<var $path><const KAREHA_SCRIPT>?task=deletethread&amp;thread=<var $thread>&amp;&amp;admin=<var $adminpass>&amp;r=1">delete thread</a>
 	</div>
 
 	<loop $posts>
 		<div class="post">
 		<div class="postcommands">
 		<label><input type="checkbox" name="delete" value="<var $thread>,<var $num>" />
-		Posted by: <var ADMIN_MASK_IPS?$masked_ip:$ip>
-		- Password: <var $password>
+			Posted by: <var ADMIN_MASK_IPS?$masked_ip:$ip>
+		-	Password: <var $password>
 		</label>
-		- <a href="<var $path><const KAREHA_SCRIPT>?task=delete&amp;delete=<var $thread>,<var $num>&amp;password=<var $adminpass>&amp;r=1">delete post</a>
-		<if $filename>- <a href="<var $path><const KAREHA_SCRIPT>?task=delete&amp;delete=<var $thread>,<var $num>&amp;fileonly=1&amp;password=<var $adminpass>&amp;r=1">delete file</a></if>
-		<if ADMIN_BAN_FILE>- <a href="<var $self>?ban&admin=<var $adminpass>&amp;id=<var $masked_ip>" onclick="return banclick(this)">ban IP</a></if>
+		-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&amp;delete=<var $thread>,<var $num>&amp;password=<var $adminpass>&amp;r=1">delete post</a>
+		<if $filename>-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&amp;delete=<var $thread>,<var $num>&amp;fileonly=1&amp;password=<var $adminpass>&amp;r=1">delete file</a></if>
+		<if ADMIN_BAN_FILE>-	<a href="<var $self>?ban&admin=<var $adminpass>&amp;id=<var $masked_ip>" onclick="return banclick(this)">ban IP</a></if>
 		</div>
 		<div class="posttext">
 			<var $abbreviation or $text>
@@ -187,17 +162,8 @@ use constant LIST_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
 	<td align="right"><a href="<var $self>?<var $thread>"><var $postcount></a></td>
 	<td><var make_date($lastmod,DATE_STYLE)></td>
 	<td align="right"><var int($size/1024)> kb</td>
-
-	<td>
-	<if !$permasage><a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=1&amp;&amp;admin=<var $adminpass>&amp;r=1">permasage</a></if>
-	<if $permasage><a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=0&amp;&amp;admin=<var $adminpass>&amp;r=1">unpermasage</a></if>
-	</td>
-
-	<td>
-	<if !$closed><a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=1&amp;&amp;admin=<var $adminpass>&amp;r=1">close</a></if>
-	<if $closed><a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=0&amp;&amp;admin=<var $adminpass>&amp;r=1">open</a></if>
-	</td>
-
+	<td><a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=<if !$permasage>1</if><if $permasage>0</if>&amp;&amp;admin=<var $adminpass>&amp;r=1"><if $permasage>un</if>permasage</a></td>
+	<td><a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=<if !$closed>1</if><if $closed>0</if>&amp;&amp;admin=<var $adminpass>&amp;r=1"><if $closed>un</if>close</a></td>
 	</tr>
 </loop>
 </tbody></table>
@@ -206,13 +172,14 @@ use constant LIST_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
 });
 
 use constant LOGIN_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
-<form action="<var $ENV{SCRIPT_NAME}.$ENV{PATH_INFO}>" method="post">
-<if $failed><div align="center"><strong>Password incorrect</strong></div></if>
-<div align="center">
-Admin password:
-<input type="password" name="berra" />
-<input type="submit" value="Login" />
-</div>
+<form action="<var $ENV{SCRIPT_NAME}.$ENV{PATH_INFO}>" method="post" class="login">
+	<if $failed><h2>Wrong password.</h2></if>
+	<p>
+		Admin password:
+		<input type="password" name="berra" />
+		<input type="submit" value="Login" />
+	</p>
+	<p>[<a href=".">Back to board index</a>]</p>
 </form>
 
 </body></html>
@@ -239,6 +206,7 @@ if($pass ne ENCODED_PASS)
 
 		print LOGIN_TEMPLATE->(
 			failed=>defined $password,
+			login_page=>1,
 		);
 
 		exit;
@@ -249,8 +217,11 @@ if($pass ne ENCODED_PASS)
 	}
 }
 
+no strict;
+$admin_title='Admin interface for '.TITLE;
+use strict;
+
 my @shownthreads;
-my $showlist;
 my ($threadnum,$ranges,$list,$edit,$ban,$logout,$page)=
 	$ENV{QUERY_STRING}=~
 	m!/*(?:(\d+)(?:/(.*))?|(list)|(edit)|(ban)|(logout)|p(\d+))!i;
