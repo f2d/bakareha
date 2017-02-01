@@ -17,7 +17,7 @@ use constant S_RETREF => 'Revisit previous page';				# Back from error
 use constant S_ADMIN_PANEL_LINK => 'Manage';
 
 use constant S_NAME => 'Name';							# Describes name field
-use constant S_EMAIL => 'Link';							# Describes e-mail field
+use constant S_EMAIL => 'E-mail';						# Describes e-mail field
 use constant S_SUBJECT => 'Subject';						# Describes subject field
 use constant S_SUBMIT => 'Submit';						# Describes submit button
 use constant S_COMMENT => 'Comment';						# Describes comment field

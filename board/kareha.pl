@@ -542,9 +542,9 @@ sub format_comment($$$)
 	# fix <blockquote> styles for old stylesheets
 	$comment=~s/<blockquote>/<blockquote class="unkfunc">/g if(FUDGE_BLOCKQUOTES);
 
-	# replace current domain with single slash
+	# replace current domain inside links with a single slash, only for http://
 	my $d=$ENV{HTTP_HOST};
-	$comment=~s!(<a\s+[^>]*?\bhref=")\w+:/+$d/+!$1/!gi;
+	$comment=~s!(<a\s+[^>]*?\bhref=")[htp]+:/+$d/+!$1/!gi;
 
 	return $comment;
 }
