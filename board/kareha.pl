@@ -69,6 +69,9 @@ if($task eq "post")
 		? $ENV{HTTP_USER_AGENT}
 		: ""
 	);
+	my %format_options=(
+		relative_local_links => ($query->param("links_as_is")?0:1)
+	);
 
 	post_stuff(
 		$thread
@@ -86,6 +89,8 @@ if($task eq "post")
 	,	$markup
 	,	$savemarkup
 	,	$file
+
+	,	%format_options
 	);
 }
 elsif($task eq "preview")
@@ -93,8 +98,11 @@ elsif($task eq "preview")
 	my $comment=$query->param("comment");
 	my $markup=$query->param("markup");
 	my $thread=$query->param("thread");
+	my %format_options=(
+		relative_local_links => ($query->param("links_as_is")?0:1)
+	);
 
-	preview_post($comment,$markup,$thread);
+	preview_post($comment,$markup,$thread,%format_options);
 	exit;
 }
 elsif($task eq "delete")
@@ -315,7 +323,7 @@ sub update_threads()
 # Posting
 #
 
-sub post_stuff($$$$$$$$$$$$)
+sub post_stuff($$$$$$$$$$$$;%)
 {
 	my (
 		$thread
@@ -333,6 +341,8 @@ sub post_stuff($$$$$$$$$$$$)
 	,	$markup
 	,	$savemarkup
 	,	$file
+
+	,	%format_options
 	)=@_;
 
 	# get a timestamp for future use
@@ -438,7 +448,7 @@ sub post_stuff($$$$$$$$$$$$)
 	$thread=make_thread($title,$time,$name.$trip) unless $thread;
 
 	# format the comment
-	$comment=format_comment($comment,$markup,$thread);
+	$comment=format_comment($comment,$markup,$thread,%format_options);
 
 	# generate date
 	my $date=make_date($time,DATE_STYLE);
@@ -496,9 +506,9 @@ sub post_stuff($$$$$$$$$$$$)
 	); # yum!
 }
 
-sub preview_post($$$)
+sub preview_post($$$;%)
 {
-	my ($comment,$markup,$thread)=@_;
+	my ($comment,$markup,$thread,%format_options)=@_;
 
 	$thread=time() unless $thread;
 
@@ -506,7 +516,7 @@ sub preview_post($$$)
 	make_error(sprintf(S_TOOLONG,"comment",length($comment)-&MAX_COMMENT_LENGTH)) if length($comment)>MAX_COMMENT_LENGTH;
 
 	# format the comment
-	$comment=format_comment($comment,$markup,$thread);
+	$comment=format_comment($comment,$markup,$thread,%format_options);
 
 	print "Content-Type: text/html\n";
 	print "\n";
@@ -524,9 +534,9 @@ sub proxy_check($)
 	}
 }
 
-sub format_comment($$$)
+sub format_comment($$$;%)
 {
-	my ($comment,$markup,$thread)=@_;
+	my ($comment,$markup,$thread,%format_options)=@_;
 
 	$thread=get_thread_filename($thread);
 	$markup=DEFAULT_MARKUP unless grep $markup eq $_,MARKUP_FORMATS;
@@ -542,9 +552,17 @@ sub format_comment($$$)
 	# fix <blockquote> styles for old stylesheets
 	$comment=~s/<blockquote>/<blockquote class="unkfunc">/g if(FUDGE_BLOCKQUOTES);
 
-	# replace current domain inside links with a single slash, only for http://
-	my $d=$ENV{HTTP_HOST};
-	$comment=~s!(<a\s+[^>]*?\bhref=")[htp]+:/+$d/+!$1/!gi;
+	if (%format_options) {
+		if ($format_options{relative_local_links}) {
+			my $d=$ENV{HTTP_HOST};
+
+			# this server name, IP or domain: replace dots with character-class dots
+			$d=~s!\.![.]!g;
+
+			# make local links root-relative: replace this server name with a single slash
+			$comment=~s!(<a\s+[^>]*?\bhref=")\w+:/+$d/+!$1/!gi;
+		}
+	}
 
 	return $comment;
 }

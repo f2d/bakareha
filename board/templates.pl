@@ -25,7 +25,9 @@ use constant S_UPLOADFILE => 'File';						# Describes file field
 use constant S_CAPTCHA => 'Verification';					# Describes captcha field
 use constant S_DELPASS => 'Password';						# Describes password field
 use constant S_DELEXPL => '(for post and file deletion)';			# Prints explanation for password box (to the right)
-use constant S_TELL_UA => 'Browser';						# Describes UA switch
+use constant S_LINK_AS_IS => 'Links as is';					# Describes local links trimming switch
+use constant S_LINK_AS_IS_EXPL => '(for this site, keep scheme:// and site name as written)';
+use constant S_TELL_UA => 'Browser';						# Describes User-Agent switch
 use constant S_TELL_UA_EXPL => '(tell your browser software name and version)';	# Prints explanation for UA switch
 
 use constant S_DLINK => 'Click filename to download.';				# Prints instructions for downloading file
@@ -178,6 +180,7 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 	</if>
 
 	<tr><td class="postblock"><const S_DELPASS></td><td><input type="password" name="password" size="8" /> <const S_DELEXPL></td></tr>
+	<tr><td class="postblock"><const S_LINK_AS_IS></td><td><label><input type="checkbox" name="links_as_is" /> <const S_LINK_AS_IS_EXPL></label></td></tr>
 	<tr><td class="postblock"><const S_TELL_UA></td><td><label><input type="checkbox" name="save_useragent" /> <const S_TELL_UA_EXPL></label></td></tr>
 
 	<if SPAM_TRAP>
@@ -293,6 +296,7 @@ use constant THREAD_HEAD_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 	</if>
 
 	<tr><td class="postblock"><const S_DELPASS></td><td><input type="password" name="password" size="8" /> <const S_DELEXPL></td></tr>
+	<tr><td class="postblock"><const S_LINK_AS_IS></td><td><label><input type="checkbox" name="links_as_is" /> <const S_LINK_AS_IS_EXPL></label></td></tr>
 	<tr><td class="postblock"><const S_TELL_UA></td><td><label><input type="checkbox" name="save_useragent" /> <const S_TELL_UA_EXPL></label></td></tr>
 
 	<if SPAM_TRAP>
