@@ -250,7 +250,7 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 </td></tr></tbody></table>
 
-[<a href="<var expand_filename('admin.pl')>"><const S_ADMIN_PANEL_LINK></a>]
+[<a href="<var expand_filename('admin.pl')>" rel="nofollow"><const S_ADMIN_PANEL_LINK></a>]
 
 }.NORMAL_FOOT_INCLUDE,KEEP_MAINPAGE_NEWLINES);
 
@@ -341,7 +341,7 @@ use constant THREAD_FOOT_TEMPLATE => compile_template(q{
 	</div>
 </form>
 
-[<a href="<var expand_filename('admin.pl')>?<var $thread>"><const S_ADMIN_PANEL_LINK></a>]
+[<a href="<var expand_filename('admin.pl')>?<var $thread>" rel="nofollow"><const S_ADMIN_PANEL_LINK></a>]
 
 }.NORMAL_FOOT_INCLUDE);
 

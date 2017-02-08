@@ -1,6 +1,7 @@
-﻿#deletecontrols {float: right;}
+﻿#deletecontrols {float: right; text-align: right;}
+#deletecontrols input[type=text] {min-width: 24em;}
 #threadlist a {display: block;}
-.deletebutton {display:none;}
+.deletebutton, .posttext input {display: none;}
 .login {text-align: center;}
 .post {border: 1px solid #79c; background: #e7e7ff; padding: 0; margin-bottom: 0.3em; clear: both;}
 .postcommands {margin: 0; padding: 3px; background: #ccddff; font-family: sans-serif;}

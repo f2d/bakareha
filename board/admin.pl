@@ -51,21 +51,26 @@ Edit: <loop $editable>
 </loop>
 <br />
 </if>
-<a href="<var $path><const KAREHA_SCRIPT>?task=rebuild&amp;admin=<var $adminpass>">Rebuild caches</a> |
+<a href="<var $path><const KAREHA_SCRIPT>?task=rebuild&admin=<var $adminpass>">Rebuild caches</a> |
 <a href="<var $path><const HTML_SELF>">Return to board</a> | 
 <a href="<var $self>?logout">Log out</a>
 </div>
 
 <div id="threads">
 
-<form action="<const KAREHA_SCRIPT>" method="post">
+<form action="<var $self>" method="post">
 
 <div id="deletecontrols">
-<input type="hidden" name="task" value="delete" />
-<input type="hidden" name="password" value="<var $adminpass>" />
-<input type="hidden" name="r" value="1" />
-<input value="Delete marked posts" type="submit" />
-<label><input type="checkbox" name="fileonly" value="on" />File only</label>
+	All checkbox-marked posts:
+
+	<input type="hidden" name="password" value="<var $adminpass>" />
+	<input type="hidden" name="r" value="1" />
+	<label><input type="checkbox" name="fileonly" value="on" />File only</label>
+	<input type="submit" name="task" value="delete" />
+	<br />
+
+	<input type="text" name="reason" placeholder="Write the ban reason here." />
+	<input type="submit" name="task" value="ban" />
 </div>
 
 <script type="text/javascript">
@@ -81,21 +86,22 @@ function banclick(link)
 	<h2><a href="<var $self>?<var $thread>"><var $title or "Thread $thread"> (<var $postcount> posts)</a></h2>
 
 	<div class="threadcommands">
-		<a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=<if !$permasage>1</if><if $permasage>0</if>&amp;&amp;admin=<var $adminpass>&amp;r=1"><if $permasage>un</if>permasage thread</a>
-	-	<a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=<if !$closed>1</if><if $closed>0</if>&amp;&amp;admin=<var $adminpass>&amp;r=1"><if $closed>un</if>close thread</a>
-	-	<a href="<var $path><const KAREHA_SCRIPT>?task=deletethread&amp;thread=<var $thread>&amp;&amp;admin=<var $adminpass>&amp;r=1">delete thread</a>
+		<a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&thread=<var $thread>&state=<if !$permasage>1</if><if $permasage>0</if>&admin=<var $adminpass>&r=1"><if $permasage>un</if>permasage thread</a>
+	-	<a href="<var $path><const KAREHA_SCRIPT>?task=closethread&thread=<var $thread>&state=<if !$closed>1</if><if $closed>0</if>&admin=<var $adminpass>&r=1"><if $closed>un</if>close thread</a>
+	-	<a href="<var $path><const KAREHA_SCRIPT>?task=deletethread&thread=<var $thread>&admin=<var $adminpass>&r=1">delete thread</a>
 	</div>
 
 	<loop $posts>
 		<div class="post">
 		<div class="postcommands">
-		<label><input type="checkbox" name="delete" value="<var $thread>,<var $num>" />
+		<label>
+			<input type="checkbox" name="bandelete" value="<var $masked_ip>:<var $thread>,<var $num>" />
 			Posted by: <var ADMIN_MASK_IPS?$masked_ip:$ip>
 		-	Password: <var $password>
 		</label>
-		-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&amp;delete=<var $thread>,<var $num>&amp;password=<var $adminpass>&amp;r=1">delete post</a>
-		<if $filename>-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&amp;delete=<var $thread>,<var $num>&amp;fileonly=1&amp;password=<var $adminpass>&amp;r=1">delete file</a></if>
-		<if ADMIN_BAN_FILE>-	<a href="<var $self>?ban&admin=<var $adminpass>&amp;id=<var $masked_ip>" onclick="return banclick(this)">ban IP</a></if>
+		-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&delete=<var $thread>,<var $num>&password=<var $adminpass>&r=1">delete post</a>
+		<if $filename>-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&delete=<var $thread>,<var $num>&fileonly=1&password=<var $adminpass>&r=1">delete file</a></if>
+		<if ADMIN_BAN_FILE>-	<a href="<var $self>?ban&admin=<var $adminpass>&id=<var $masked_ip>" onclick="return banclick(this)">ban IP</a></if>
 		</div>
 		<div class="posttext">
 			<var $abbreviation or $text>
@@ -128,7 +134,7 @@ use constant EDIT_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
 <if grep $filename eq $_,SPAM_FILES><p>
 This is the list of domain names Kareha considers to be spam.<br />
 You can find an up-to-date version
-<a href="http://wakaba.c3.cx/antispam/antispam.pl?action=view&amp;format=wakaba">here</a>,
+<a href="http://wakaba.c3.cx/antispam/antispam.pl?action=view&format=wakaba">here</a>,
 or you can get the <code>spam.txt</code> file directly <a href="http://wakaba.c3.cx/antispam/spam.txt">here</a>.
 </p></if>
 
@@ -162,8 +168,8 @@ use constant LIST_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
 	<td align="right"><a href="<var $self>?<var $thread>"><var $postcount></a></td>
 	<td><var make_date($lastmod,DATE_STYLE)></td>
 	<td align="right"><var int($size/1024)> kb</td>
-	<td><a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=<if !$permasage>1</if><if $permasage>0</if>&amp;&amp;admin=<var $adminpass>&amp;r=1"><if $permasage>un</if>permasage</a></td>
-	<td><a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=<if !$closed>1</if><if $closed>0</if>&amp;&amp;admin=<var $adminpass>&amp;r=1"><if $closed>un</if>close</a></td>
+	<td><a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&thread=<var $thread>&state=<if !$permasage>1</if><if $permasage>0</if>&admin=<var $adminpass>&r=1"><if $permasage>un</if>permasage</a></td>
+	<td><a href="<var $path><const KAREHA_SCRIPT>?task=closethread&thread=<var $thread>&state=<if !$closed>1</if><if $closed>0</if>&admin=<var $adminpass>&r=1"><if $closed>un</if>close</a></td>
 	</tr>
 </loop>
 </tbody></table>
@@ -188,9 +194,6 @@ use constant LOGIN_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
 
 
 
-
-my @threads=get_threads(1);
-my %log=read_log();
 
 my $query=new CGI;
 my $pass=$query->cookie("adminpass");
@@ -217,11 +220,50 @@ if($pass ne ENCODED_PASS)
 	}
 }
 
+my $task=$query->param("task");
+if($task)
+{
+	my @posts=$query->param("bandelete");
+	if($task eq "delete") {
+		# copy-pasta crutch replacement for kareha.pl?task=delete:
+
+		my $password=$query->param("password");
+		my $fileonly=$query->param("fileonly");
+
+		no strict;
+		my ($self_path)=$ENV{SCRIPT_NAME}=~m!^(.*/)[^/]*$!;
+		$ENV{SCRIPT_NAME}=$self_path.KAREHA_SCRIPT;
+		$stylesheets=get_stylesheets();
+		use strict;
+
+		my $log=lock_log();
+		delete_stuff($password,$fileonly,@posts);
+		release_log($log);
+
+		if($query->param("r")) { make_http_forward($ENV{HTTP_REFERER},ALTERNATE_REDIRECT) }
+		else { make_http_forward(HTML_SELF,ALTERNATE_REDIRECT) }
+	}
+	elsif($task eq "ban") {
+		my $reason=$query->param("reason");
+		my @ids;
+		foreach my $id (@posts) {
+			$id=~s![\:;].*$!!;
+			push (@ids, $id) unless grep{$_ eq $id} @ids; # <- add only unique IDs to array
+		}
+		do_bans($reason,@ids);
+	} else {
+		die "Requested task is not supported.";
+	}
+}
+
 no strict;
 $admin_title='Admin interface for '.TITLE;
 use strict;
 
 my @shownthreads;
+my @threads=get_threads(1);
+my %log=read_log();
+
 my ($threadnum,$ranges,$list,$edit,$ban,$logout,$page)=
 	$ENV{QUERY_STRING}=~
 	m!/*(?:(\d+)(?:/(.*))?|(list)|(edit)|(ban)|(logout)|p(\d+))!i;
@@ -236,26 +278,24 @@ elsif($list)
 }
 elsif($edit)
 {
+	die unless $query->param('admin') eq ENCODED_PASS;
+
 	my $filename=$query->param("filename");
 	my $contents=$query->param("contents");
 
 	die "Not an editable file" unless grep { $_ eq $filename } (ADMIN_EDITABLE_FILES);
 
-	if(defined $contents)
-	{
-		die unless $query->param('admin') eq ENCODED_PASS;
-		do_save($filename,$contents);
-	}
+	if(defined $contents) { do_save($filename,$contents); }
 	else { show_edit($filename) }
 }
 elsif($ban)
 {
-	my $id=$query->param("id");
-	my $reason=$query->param("reason");
-
 	die unless $query->param('admin') eq ENCODED_PASS;
 
-	do_ban($id,$reason);
+	my @ids=$query->param("id");
+	my $reason=$query->param("reason");
+
+	do_bans($reason,@ids);
 }
 elsif($logout)
 {
@@ -337,23 +377,27 @@ sub do_save($$)
 	make_http_forward($ENV{SCRIPT_NAME},ALTERNATE_REDIRECT);
 }
 
-sub do_ban($$)
+sub do_bans($@)
 {
-	my ($id,$reason)=@_;
-	my $ip;
-
-	if($id=~/^\d+\.\d+\.\d+\.\d+$/) { $ip=$id }
-	elsif($id=~/^[0-9a-f]{8}$/i) { $ip=unmask_ip($id,make_key("mask",SECRET,32)) }
-	else { die "Invalid address specified" }
-
 	die "Banning is disabled" unless ADMIN_BAN_FILE;
+
+	my ($reason,@ids)=@_;
+
+	foreach my $id (@ids) {
+		if(
+			!($id=~/^\d+\.\d+\.\d+\.\d+$/)
+		&&	!($id=~/^[0-9a-f]{8}$/i)
+		) { die "Invalid address specified"; }
+	}
 
 	open BANFILE,">>",ADMIN_BAN_FILE or die "Could not open ban file \"".ADMIN_BAN_FILE."\" for writing";
 
-	print BANFILE compile_template(ADMIN_BAN_TEMPLATE,1)->(
-		ip=>$ip,
-		reason=>$reason,
-	);
+	foreach my $id (@ids) {
+		print BANFILE compile_template(ADMIN_BAN_TEMPLATE,1)->(
+			ip=>( ($id=~/\./) ? $id : unmask_ip($id,make_key("mask",SECRET,32)) ),
+			reason=>$reason,
+		);
+	}
 
 	close BANFILE;
 
