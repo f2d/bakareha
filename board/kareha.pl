@@ -420,26 +420,21 @@ sub post_stuff($$$$$$$$$$$$;%)
 	my %capped_trips=CAPPED_TRIPS;
 	$capped=$capped_trips{$trip};
 
+	# check for posting limitations
+	unless($capped)
+	{
+		make_error(S_NOTALLOWED) unless(
+			$file
+			? ($thread ? ALLOW_IMAGE_REPLIES : ALLOW_IMAGE_THREADS)
+			: ($thread ? ALLOW_TEXT_REPLIES : ALLOW_TEXT_THREADS)
+		);
+	}
+
 	# insert anonymous name if none entered
 	$name=make_anonymous($ip,$time,($thread or $time)) unless $name or $trip;
 
 	# reveal host when name is "fusianasan"
 	($name,$trip)=("",resolve_host($ENV{REMOTE_ADDR}).$trip) if $name=~/fusianasan/i;
-
-	# check for posting limitations
-	unless($capped)
-	{
-		if($thread)
-		{
-			make_error(S_NOTALLOWED) if($file and !ALLOW_IMAGE_REPLIES);
-			make_error(S_NOTALLOWED) if(!$file and !ALLOW_TEXT_REPLIES);
-		}
-		else
-		{
-			make_error(S_NOTALLOWED) if($file and !ALLOW_IMAGE_THREADS);
-			make_error(S_NOTALLOWED) if(!$file and !ALLOW_TEXT_THREADS);
-		}
-	}
 
 	# copy file, do checksums, make thumbnail, etc
 	my ($abbr_filename,$filename,$ext,$size,$md5,$width,$height,$thumbnail,$tn_width,$tn_height)=process_file($file,$time) if($file);
@@ -690,7 +685,7 @@ sub make_reply(%)
 
 	my $thread=read_thread($vars{thread});
 
-	make_error(S_THREADCLOSED) if($$thread{closed});
+	make_error(S_THREADCLOSED) if(!$vars{capped} and $$thread{closed});
 
 	$$thread{postcount}++;
 	$$thread{lastmod}=$vars{time};
