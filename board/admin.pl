@@ -47,11 +47,11 @@ Pages: <loop template_for("page",0,(scalar(@$threads)-1)/THREADS_DISPLAYED)>
 <div id="maincommands">
 <if @$editable>
 Edit: <loop $editable>
-	<a href="<var $self>?edit&filename=<var urlenc($filename)>"><var $filename></a>
+	<a href="<var $self>?edit&amp;filename=<var urlenc($filename)>"><var $filename></a>
 </loop>
 <br />
 </if>
-<a href="<var $path><const KAREHA_SCRIPT>?task=rebuild&admin=<var $adminpass>">Rebuild caches</a> |
+<a href="<var $path><const KAREHA_SCRIPT>?task=rebuild&amp;admin=<var $adminpass>">Rebuild caches</a> |
 <a href="<var $path><const HTML_SELF>">Return to board</a> | 
 <a href="<var $self>?logout">Log out</a>
 </div>
@@ -77,7 +77,7 @@ Edit: <loop $editable>
 function banclick(link)
 {
 	var r=prompt("What's the reason for this ban?");
-	if(r) document.location=link.href+"&reason="+encodeURIComponent(r);
+	if(r) document.location=link.href+"&amp;reason="+encodeURIComponent(r);
 	return false;
 }
 </script>
@@ -86,9 +86,9 @@ function banclick(link)
 	<h2><a href="<var $self>?<var $thread>"><var $title or "Thread $thread"> (<var $postcount> posts)</a></h2>
 
 	<div class="threadcommands">
-		<a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&thread=<var $thread>&state=<if !$permasage>1</if><if $permasage>0</if>&admin=<var $adminpass>&r=1"><if $permasage>un</if>permasage thread</a>
-	-	<a href="<var $path><const KAREHA_SCRIPT>?task=closethread&thread=<var $thread>&state=<if !$closed>1</if><if $closed>0</if>&admin=<var $adminpass>&r=1"><if $closed>un</if>close thread</a>
-	-	<a href="<var $path><const KAREHA_SCRIPT>?task=deletethread&thread=<var $thread>&admin=<var $adminpass>&r=1">delete thread</a>
+		<a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=<if !$permasage>1</if><if $permasage>0</if>&amp;admin=<var $adminpass>&amp;r=1"><if $permasage>un</if>permasage thread</a>
+	-	<a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=<if !$closed>1</if><if $closed>0</if>&amp;admin=<var $adminpass>&amp;r=1"><if $closed>un</if>close thread</a>
+	-	<a href="<var $path><const KAREHA_SCRIPT>?task=deletethread&amp;thread=<var $thread>&amp;admin=<var $adminpass>&amp;r=1">delete thread</a>
 	</div>
 
 	<loop $posts>
@@ -99,9 +99,9 @@ function banclick(link)
 			Posted by: <var ADMIN_MASK_IPS?$masked_ip:$ip>
 		-	Password: <var $password>
 		</label>
-		-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&delete=<var $thread>,<var $num>&password=<var $adminpass>&r=1">delete post</a>
-		<if $filename>-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&delete=<var $thread>,<var $num>&fileonly=1&password=<var $adminpass>&r=1">delete file</a></if>
-		<if ADMIN_BAN_FILE>-	<a href="<var $self>?ban&admin=<var $adminpass>&id=<var $masked_ip>" onclick="return banclick(this)">ban IP</a></if>
+		-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&amp;delete=<var $thread>,<var $num>&amp;password=<var $adminpass>&amp;r=1">delete post</a>
+		<if $filename>-	<a href="<var $path><const KAREHA_SCRIPT>?task=delete&amp;delete=<var $thread>,<var $num>&amp;fileonly=1&amp;password=<var $adminpass>&amp;r=1">delete file</a></if>
+		<if ADMIN_BAN_FILE>-	<a href="<var $self>?ban&amp;admin=<var $adminpass>&amp;id=<var $masked_ip>" onclick="return banclick(this)">ban IP</a></if>
 		</div>
 		<div class="posttext">
 			<var $abbreviation or $text>
@@ -134,7 +134,7 @@ use constant EDIT_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
 <if grep $filename eq $_,SPAM_FILES><p>
 This is the list of domain names Kareha considers to be spam.<br />
 You can find an up-to-date version
-<a href="http://wakaba.c3.cx/antispam/antispam.pl?action=view&format=wakaba">here</a>,
+<a href="http://wakaba.c3.cx/antispam/antispam.pl?action=view&amp;format=wakaba">here</a>,
 or you can get the <code>spam.txt</code> file directly <a href="http://wakaba.c3.cx/antispam/spam.txt">here</a>.
 </p></if>
 
@@ -168,8 +168,8 @@ use constant LIST_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
 	<td align="right"><a href="<var $self>?<var $thread>"><var $postcount></a></td>
 	<td><var make_date($lastmod,DATE_STYLE)></td>
 	<td align="right"><var int($size/1024)> kb</td>
-	<td><a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&thread=<var $thread>&state=<if !$permasage>1</if><if $permasage>0</if>&admin=<var $adminpass>&r=1"><if $permasage>un</if>permasage</a></td>
-	<td><a href="<var $path><const KAREHA_SCRIPT>?task=closethread&thread=<var $thread>&state=<if !$closed>1</if><if $closed>0</if>&admin=<var $adminpass>&r=1"><if $closed>un</if>close</a></td>
+	<td><a href="<var $path><const KAREHA_SCRIPT>?task=permasagethread&amp;thread=<var $thread>&amp;state=<if !$permasage>1</if><if $permasage>0</if>&amp;admin=<var $adminpass>&amp;r=1"><if $permasage>un</if>permasage</a></td>
+	<td><a href="<var $path><const KAREHA_SCRIPT>?task=closethread&amp;thread=<var $thread>&amp;state=<if !$closed>1</if><if $closed>0</if>&amp;admin=<var $adminpass>&amp;r=1"><if $closed>un</if>close</a></td>
 	</tr>
 </loop>
 </tbody></table>
