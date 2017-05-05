@@ -2,7 +2,8 @@
 
 function id(i) {return document.getElementById(i);}
 function is_ie() {return document.all && !document.opera;}
-function gn(n,p) {return (p || document).getElementsByTagName(n);}
+function gc(n,p) {try {return [].slice.call((p || document).getElementsByClassName(n) || []);} catch(e) {return [];}}
+function gn(n,p) {try {return [].slice.call((p || document).getElementsByTagName(n) || []);} catch(e) {return [];}}
 function show(i) {
 var	style = i.style || id(i).style
 ,	n = 'none'
@@ -212,19 +213,19 @@ window.onunload = function(e) {
 }
 
 window.onload = function(e) {
-var	a = gn('p')
+var	a = gc('abbrev')
 ,	i = a.length
 ,	h = location.hash
 ,	r = /\babbrev\b/i
-,	t,b,c
+,	b,c,e,p,t
 	;
 	while (i--) if (
-		(d = a[i])
-	&&	(c = d.className) && r.test(c)
-	&&	(t = gn('td', d.previousElementSibling))
-	&&	(c = t.length)
+		(e = a[i])
+	&&	(p = e.parentNode)
+	&&	(t = p.tagName) && t.toLowerCase() === 'p'
+	&&	(t = p.parentNode)
 	) {
-		t[c-1].appendChild(d);
+		t.insertBefore(e, p.nextSibling);
 	}
 	if (id('de-pform')) return;
 	if (!id('postform') && (i = gn('hr')) && (i = i[1])) {
