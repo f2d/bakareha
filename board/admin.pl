@@ -57,7 +57,6 @@ Edit: <loop $editable>
 </div>
 
 <div id="threads">
-
 <form action="<var $self>" method="post">
 
 <div id="deletecontrols">
@@ -110,8 +109,9 @@ function banclick(link)
 		</div>
 	</loop>
 </loop>
-</div>
+
 </form>
+</div>
 
 <div class="navi">
 Pages: <loop template_for("page",0,(scalar(@$threads)-1)/THREADS_DISPLAYED)>
