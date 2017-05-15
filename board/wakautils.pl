@@ -238,6 +238,7 @@ sub do_spans($@)
 	{
 		my $line=$_;
 		my @hidden;
+		my $is_utf8=utf8::decode($line);
 
 		# hide preformatted <code> sections:
 		$line=~s{ (?<![\x80-\x9f\xe0-\xfc]) (`+) ([^<>]+?) (?<![\x80-\x9f\xe0-\xfc]) \1}{push @hidden,"<code>$2</code>"; "<!--$#hidden-->"}sgex;
@@ -267,6 +268,7 @@ sub do_spans($@)
 		# fix up hidden sections
 		$line=~s{<!--([0-9]+)-->}{$hidden[$1]}ge;
 
+		utf8::encode($line) if ($is_utf8);
 		$line;
 	} @_;
 }
