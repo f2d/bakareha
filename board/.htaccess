@@ -1,5 +1,8 @@
-# If you change this file extension, also change the RewriteRule further down.
+# If you change this file extension, also change it further down in RewriteRule etc.
 AddCharset utf-8 html
+
+AddHandler cgi-script cgi pl
+Options +ExecCGI -MultiViews
 
 <Files *.txt>
 	Deny from all
@@ -11,7 +14,11 @@ AddCharset utf-8 html
 
 <IfModule alias_module>
 	RedirectMatch 403 /(_bak|extras|include)/
-	RedirectMatch 302 (^[^?]*/)(res|thumb|src)[/.]*$ $1
+	RedirectMatch 302 ^([^?]*/)(res|thumb|src)[/.]*$ $1
+</IfModule>
+
+<IfModule dir_module>
+	DirectoryIndex index.html kareha.pl
 </IfModule>
 
 <IfModule headers_module>
@@ -25,13 +32,8 @@ AddCharset utf-8 html
 
 <IfModule rewrite_module>
 	RewriteEngine On
+
+# set content type to xhtml:
 	RewriteCond %{HTTP_ACCEPT} application/xhtml\+xml
 	RewriteRule \.html$ - [T=application/xhtml+xml;charset=utf-8]
 </IfModule>
-
-<IfModule dir_module>
-	DirectoryIndex index.html kareha.pl
-</IfModule>
-
-Options +ExecCGI
-AddHandler cgi-script cgi pl
