@@ -223,7 +223,7 @@ if($pass ne ENCODED_PASS)
 my $task=$query->param("task");
 if($task)
 {
-	my @posts=$query->param("bandelete");
+	my @posts=$query->multi_param("bandelete");
 	if($task eq "delete") {
 		# copy-pasta crutch replacement for kareha.pl?task=delete:
 
@@ -292,7 +292,7 @@ elsif($ban)
 {
 	die unless $query->param('admin') eq ENCODED_PASS;
 
-	my @ids=$query->param("id");
+	my @ids=$query->multi_param("id");
 	my $reason=$query->param("reason");
 
 	do_bans($reason,@ids);

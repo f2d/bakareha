@@ -1116,10 +1116,10 @@ sub spam_engine(%)
 	for(@trap_fields) { spam_screen($query) if $query->param($_) }
 
 	my $spam_checker=compile_spam_checker(@spam_files);
-	my @fields=@included_fields?@included_fields:$query->param;
+	my @fields=@included_fields?@included_fields:$query->multi_param;
 	@fields=grep !$excluded_fields{$_},@fields if %excluded_fields;
-#	my $fulltext=join "\n",map decode_string($query->param($_),$charset),@fields;
-	my $fulltext=join "\n",map $query->param($_),@fields;
+#	my $fulltext=join "\n",map decode_string($query->multi_param($_),$charset),@fields;
+	my $fulltext=join "\n",map $query->multi_param($_),@fields;
 	study $fulltext;
 
 	spam_screen($query) if $spam_checker->($fulltext);
@@ -1133,10 +1133,10 @@ sub spam_screen($)
 	print "<html><body>";
 	print "<h1>Anti-spam filters triggered.</h1>";
 	print "<p>If you are not a spammer, you are probably accidentially ";
-	print "trying to use an URL that is listed in the spam file. Try ";
-	print "editing your post to remove it. Sorry for any inconvenience.</p>";
+	print "trying to use an URL or text that is listed in the spam file.</p>";
+	print "<p>Try editing your post to remove it. Sorry for any inconvenience.</p>";
 	print "<small style='color:white'><small>";
-	print "$_<br>" for(map $query->param($_),$query->param);
+	print "$_<br>" for(map $query->multi_param($_),$query->multi_param);
 	print "</small></small>";
 
 	exit 0;

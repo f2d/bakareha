@@ -109,7 +109,7 @@ elsif($task eq "delete")
 {
 	my $password=$query->param("password");
 	my $fileonly=$query->param("fileonly");
-	my @posts=$query->param("delete");
+	my @posts=$query->multi_param("delete");
 
 	delete_stuff($password,$fileonly,@posts);
 }
