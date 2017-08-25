@@ -34,6 +34,7 @@ my $url_re=url_regexp();
 
 my $query=new CGI;
 my $task=$query->param("task");
+my $admin_pass=$query->param("admin");
 
 # Rebuild main page if it doesn't exist
 unless(-e HTML_SELF)
@@ -115,14 +116,14 @@ elsif($task eq "delete")
 }
 elsif($task eq "deletethread")
 {
-	make_error(S_BADDELPASS) unless check_admin_pass($query->param("admin"));
+	make_error(S_BADDELPASS) unless check_admin_pass($admin_pass);
 
 	my $thread=$query->param("thread");
 	delete_thread($thread);
 }
 elsif($task eq "permasagethread")
 {
-	make_error(S_BADDELPASS) unless check_admin_pass($query->param("admin"));
+	make_error(S_BADDELPASS) unless check_admin_pass($admin_pass);
 
 	my $thread=$query->param("thread");
 	my $state=$query->param("state");
@@ -130,7 +131,7 @@ elsif($task eq "permasagethread")
 }
 elsif($task eq "closethread")
 {
-	make_error(S_BADDELPASS) unless check_admin_pass($query->param("admin"));
+	make_error(S_BADDELPASS) unless check_admin_pass($admin_pass);
 
 	my $thread=$query->param("thread");
 	my $state=$query->param("state");
@@ -138,7 +139,7 @@ elsif($task eq "closethread")
 }
 elsif($task eq "rebuild")
 {
-	make_error(S_BADDELPASS) unless check_admin_pass($query->param("admin"));
+	make_error(S_BADDELPASS) unless check_admin_pass($admin_pass);
 
 	build_pages();
 	update_threads();
