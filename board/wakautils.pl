@@ -21,7 +21,7 @@ use constant MAX_UNICODE => 1114111;
 # HTML utilities
 #
 
-my $protocol_re=qr{(?:http://|https://|ftp://|mailto:|news:|irc:)};
+my $protocol_re=qr{(?:http://|https://|ftp://|ftps://|mailto:|news:|irc:)};
 my $url_re=qr{(${protocol_re}[^\s<>()"]*?(?:\([^\s<>()"]*?\)[^\s<>()"]*?)*)((?:\s|<|>|"|\.||\]|!|\?|,|&#44;|&quot;)*(?:[\s<>()"]|$))};
 
 sub protocol_regexp() { return $protocol_re }
@@ -313,11 +313,12 @@ sub compile_template($;$)
 
 	my $sub=eval
 		'no strict; sub { '.
+		'my $http=$ENV{REQUEST_SCHEME} or "http";'.
 		'my $port=$ENV{SERVER_PORT}==80?"":":$ENV{SERVER_PORT}";'.
 		'my $self=$ENV{SCRIPT_NAME};'.
-		'my $absolute_self="http://$ENV{SERVER_NAME}$port$ENV{SCRIPT_NAME}";'.
+		'my $absolute_self="$http://$ENV{SERVER_NAME}$port$ENV{SCRIPT_NAME}";'.
 		'my ($path)=$ENV{SCRIPT_NAME}=~m!^(.*/)[^/]+$!;'.
-		'my $absolute_path="http://$ENV{SERVER_NAME}$port$path";'.
+		'my $absolute_path="$http://$ENV{SERVER_NAME}$port$path";'.
 		'my %__v=@_;my %__ov;for(keys %__v){$__ov{$_}=$$_;$$_=$__v{$_};}'.
 		'my $res;'.
 		$code.
