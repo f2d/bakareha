@@ -206,13 +206,16 @@ var	a = gn('link'), i = a.length, r;
 	return null;
 }
 
-//* -------- runtime: --------
-
-window.onunload = function(e) {
-	if (style_cookie) set_cookie(style_cookie,get_active_stylesheet(),365);
+function on_page_close(e) {
+	if (style_cookie) {
+		set_cookie(style_cookie, get_active_stylesheet(), 365);
+	}
 }
 
-window.onload = function(e) {
+function on_page_open(e) {
+	if (style_cookie) {
+		set_stylesheet(get_cookie(style_cookie) || get_preferred_stylesheet());
+	}
 var	a = gc('abbrev')
 ,	i = a.length
 ,	h = location.hash
@@ -270,7 +273,7 @@ var	i = gn('select')
 	}
 }
 
-if (style_cookie) set_stylesheet(get_cookie(style_cookie)||get_preferred_stylesheet());
+//* -------- runtime: --------
 
 var	captcha_key = make_password()
 ,	hash = '#i'
@@ -282,3 +285,11 @@ var	captcha_key = make_password()
 		'<li>RU: Если нет формы отправки поста, отключите убравшие её расширения (например Куклоскрипт).</li>'+
 		'</ul></td></tr></table>'
 	);
+
+if (window.addEventListener) {
+	window.addEventListener('DOMContentLoaded', on_page_open, false);
+	window.addEventListener('unload', on_page_close, false);
+} else {
+	window.onload = on_page_open;
+	window.onunload = on_page_close;
+}
