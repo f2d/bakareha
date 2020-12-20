@@ -12,6 +12,8 @@ use constant S_HOME => 'Home page';						# Link to home page
 use constant S_BOARD => 'Board index';						# Link to board index
 use constant S_BOARD_MODE => 'Board index';
 use constant S_THREAD_MODE => 'Thread view';
+use constant S_WRITE_NEW_THREAD => 'Start a new thread';
+use constant S_WRITE_NEW_REPLY => 'Write a reply';
 use constant S_RETURN => 'Return to board index';				# Back from reply mode
 use constant S_RETREF => 'Revisit previous page';				# Back from error
 use constant S_ADMIN_PANEL_LINK => 'Manage';
@@ -108,7 +110,7 @@ use constant NORMAL_HEAD_INCLUDE => q{
 		<link rel="<if !$default>alternate </if>stylesheet" type="text/css" href="<var expand_filename_time($filename)>" title="<var $title>" />
 	</loop>
 
-	<script type="text/javascript">var style_cookie="<const STYLE_COOKIE>";</script>
+	<script type="text/javascript">var style_cookie="<const STYLE_COOKIE>"; document.documentElement.className="script-on";</script>
 </head>
 <if $thread><body class="replypage"></if>
 <if !$thread><body class="mainpage"></if>
@@ -137,14 +139,14 @@ use constant NORMAL_HEAD_INCLUDE => q{
 
 use constant NORMAL_FOOT_INCLUDE => include(INCLUDE_DIR."footer.html").q{
 
-<script type="text/javascript" src="<const expand_filename_time(JS_FILE)>"></script>
+<script type="text/javascript" src="<const expand_filename_time(JS_FILE)>" defer="defer"></script>
 </body></html>
 };
 
 use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 <div class="replymode theader" id="index-form-header">
-	<const S_BOARD_MODE>:
+	<const S_BOARD_MODE>: [<span><const S_WRITE_NEW_THREAD></span>]
 </div>
 
 <if ALLOW_TEXT_THREADS or ALLOW_IMAGE_THREADS>
@@ -259,7 +261,7 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 use constant THREAD_HEAD_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 <div class="replymode theader" id="reply-form-header">
-	<const S_THREAD_MODE>:
+	<const S_THREAD_MODE>: [<span><const S_WRITE_NEW_REPLY></span>]
 </div>
 
 <if ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES>

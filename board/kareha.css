@@ -4,7 +4,6 @@
 #delform p .abbrev {margin: 1em 1em 0 0;}
 .cap {color: #a8a;}
 .cap::after {content: "★"; font-family: monospace;}
-.de-parea .postform-close {display: none;}
 .footer {text-align: center; clear: both;}
 .nothumb {float: left; background: #eee; border: 2px dashed #aaa; text-align: center; margin: 2px 1em; padding: 1em 0.5em 1em 0.5em;}
 .pagetop .adminbar, .thread-state {float: right;}
@@ -16,7 +15,7 @@
 .reflink a {color: inherit; text-decoration: none;}
 .reflink {white-space: nowrap; margin-right: 1ex;}
 .reply .filesize {margin-left: 1em;}
-.replypage .replylink, span.replylink {display: none;}
+.replypage .replylink, span.replylink, .de-parea .postform-close, .script-on #postform:not([style]) {display: none;}
 .thumb {border: none; float: left; margin: 2px 1em;}
 .userdelete {float: right; text-align: center; white-space: nowrap;}
 body {margin: 0; padding: 12px; margin-bottom: auto;}
