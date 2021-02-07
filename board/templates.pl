@@ -28,7 +28,7 @@ use constant S_CAPTCHA => 'Verification';					# Describes captcha field
 use constant S_DELPASS => 'Password';						# Describes password field
 use constant S_DELEXPL => '(for post and file deletion)';			# Prints explanation for password box (to the right)
 use constant S_LINK_AS_IS => 'Links as is';					# Describes local links trimming switch
-use constant S_LINK_AS_IS_EXPL => '(for this site, keep scheme:// and site name as written)';
+use constant S_LINK_AS_IS_EXPL => '(keep full address for links to this site in the post)';
 use constant S_TELL_UA => 'Browser';						# Describes User-Agent switch
 use constant S_TELL_UA_EXPL => '(tell your browser software name and version)';	# Prints explanation for UA switch
 

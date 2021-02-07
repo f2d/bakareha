@@ -18,6 +18,7 @@
 .replypage .replylink, span.replylink, .de-parea .postform-close, .script-on #postform:not([style]) {display: none;}
 .thumb {border: none; float: left; margin: 2px 1em;}
 .userdelete {float: right; text-align: center; white-space: nowrap;}
+.warning {color: red;}
 body {margin: 0; padding: 12px; margin-bottom: auto;}
 code {white-space: pre; background-color: rgba(100, 40, 60, 0.1);}
 form {margin-bottom: 0;}
