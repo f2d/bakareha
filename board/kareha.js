@@ -15,23 +15,42 @@ function getAllByClass(v,p) { return getAllByMethod('getElementsByClassName',v,p
 function getAllByTag(v,p) { return getAllByMethod('getElementsByTagName',v,p); }
 function getOneById(i) { return document.getElementById(i); }
 function toggle_display() {
-	for (var a = arguments, i = 0, k = a.length; i < k; i++) {
-		var e = a[i];
-		var style = e.style || getOneById(e).style;
-		var shown = (style.display === 'none');
-		style.display = (shown ? '' : 'none');
+	for (var style, show, e, a = arguments, i = 0, k = a.length; i < k; i++) {
+		var arg = a[i];
+		if (
+			typeof arg !== 'object'
+		&&	typeof arg !== 'string'
+		) {
+			show = !!arg;
+		} else
+		if (
+			(e = (typeof arg === 'object' ? arg : getOneById(arg)))
+		&&	(style = e.style)
+		) {
+			style.display = 'none'; //* <- needed for initial override
+
+			if (
+				typeof show === 'undefined'
+				? (style.display === 'none')
+				: show
+			) {
+				style.display = '';
+			}
+		}
 	}
-	return shown;
+	return show;
 }
 
-function toggle_postform(shown) {
-	if (typeof shown === 'undefined') {
-		toggle_display('toggle-postform-active', 'toggle-postform-disabled', 'postform');
+function toggle_postform(show, form) {
+	if (typeof show === 'undefined') {
+		toggle_display('toggle-postform-active', 'toggle-postform-disabled', form || 'postform');
 	} else
-	if (shown) {
-		toggle_display('toggle-postform-active');
+	if (show) {
+		toggle_display(false, 'toggle-postform-active');
+		toggle_display(true, 'toggle-postform-disabled', form || 'postform');
 	} else {
-		toggle_display('toggle-postform-disabled', 'postform');
+		toggle_display(false, 'toggle-postform-disabled', form || 'postform');
+		toggle_display(true, 'toggle-postform-active');
 	}
 }
 
@@ -43,33 +62,38 @@ function cre(e,p,b) {
 }
 
 function reply_insert(text,thread) {
-	var i = getOneById('postform');
-	var t = getOneById('postform'+thread).comment;
-	if (i && i.style.display === 'none') toggle_postform(true);
-	if (t) {
-		if (t.createTextRange && (i = t.caretPos)) {// IE
-			i.text = (i.text.charAt(i.text.length-1) === ' ' ? text+' ' : text);
+	var postForm = getOneById('postform');
+	var replyForm = (typeof thread === 'undefined' ? postForm : getOneById('postform'+thread)) || postForm;
+	var textArea = replyForm.comment;
+
+	toggle_postform(true, replyForm);
+
+	if (textArea) {
+//* IE:
+		if (textArea.createTextRange && (postForm = textArea.caretPos)) {
+			postForm.text = (postForm.text.charAt(postForm.text.length-1) === ' ' ? text+' ' : text);
 		} else
-		if (t.setSelectionRange) {// Firefox
-			var start = t.selectionStart;
-			var end = t.selectionEnd;
-			t.value = t.value.substr(0,start)+text+t.value.substr(end);
-			t.setSelectionRange(start+text.length,start+text.length);
+//* Firefox:
+		if (textArea.setSelectionRange) {
+			var start = textArea.selectionStart;
+			var end = textArea.selectionEnd;
+			textArea.value = textArea.value.substr(0,start)+text+textArea.value.substr(end);
+			textArea.setSelectionRange(start+text.length,start+text.length);
 		} else {
-			t.value += text+' ';
+			textArea.value += text+' ';
 		}
-		if ('activeElement' in document) i = document.activeElement; else
-		if ('querySelector' in document) i = document.querySelector(':focus'); else i = null;
-		if (t !== i) {
+		if ('activeElement' in document) postForm = document.activeElement; else
+		if ('querySelector' in document) postForm = document.querySelector(':focus'); else postForm = null;
+		if (replyForm !== postForm) {
 			document.body.firstElementChild.scrollIntoView(false);
-			t.focus();
+			textArea.focus();
 		}
 	}
 }
 
 function insert_reply(text,link) {
 	if (document.body.className === 'mainpage') document.location = link+hash_prefix+text;
-	else reply_insert(text,'');
+	else reply_insert(text);
 }
 
 function size_field(i,rows) {
@@ -201,7 +225,7 @@ function set_stylesheet(style_title) {
 	var i = a.length;
 	var found = false;
 	while (i--) if ((att = attrs(a[i])).title && att.rel.indexOf('style') >= 0) {
-		a[i].disabled = true; // IE needs this to work. IE needs to die.
+		a[i].disabled = true; //* <- IE needs this to work.
 		if (style_title === att.title) a[i].disabled = !(found = true);
 	}
 	if (!found) set_preferred_stylesheet();
@@ -280,9 +304,9 @@ function on_page_open(e) {
 		&&	(c = h.slice(c))
 		) {
 			try {
-				reply_insert(unescape(c),'');
+				reply_insert(unescape(c));
 			} catch (error) {
-				reply_insert(c,'');
+				reply_insert(c);
 			}
 		} else {
 			var c = 0;
@@ -302,11 +326,11 @@ function on_page_open(e) {
 			e = getAllByTag('a',e)[0];
 			e.id = 'toggle-postform-active';
 
-			toggle_postform(!!h);
-
 			d = cre('div',getAllByTag('tr',i)[0].lastElementChild);
 			d.className = 'postform-close';
 			d.innerHTML = '['+a+'x'+b+']';
+
+			toggle_postform(!!c);
 
 			break;
 		}
