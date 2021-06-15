@@ -14,6 +14,7 @@ function getAllByMethod(m,v,p) {
 function getAllByClass(v,p) { return getAllByMethod('getElementsByClassName',v,p); }
 function getAllByTag(v,p) { return getAllByMethod('getElementsByTagName',v,p); }
 function getOneById(i) { return document.getElementById(i); }
+
 function toggle_display() {
 	for (var style, show, e, a = arguments, i = 0, k = a.length; i < k; i++) {
 		var arg = a[i];
@@ -27,15 +28,13 @@ function toggle_display() {
 			(e = (typeof arg === 'object' ? arg : getOneById(arg)))
 		&&	(style = e.style)
 		) {
-			style.display = 'none'; //* <- needed for initial override
-
-			if (
+			var show_this = (
 				typeof show === 'undefined'
-				? (style.display === 'none')
+				? style.display === 'none'
 				: show
-			) {
-				style.display = '';
-			}
+			);
+			style.display = 'none'; //* <- needed for initial override
+			style.display = (show_this ? '' : 'none');
 		}
 	}
 	return show;
@@ -43,8 +42,13 @@ function toggle_display() {
 
 function toggle_postform(show, form) {
 	if (typeof show === 'undefined') {
-		toggle_display('toggle-postform-active', 'toggle-postform-disabled', form || 'postform');
-	} else
+		if (!form) form = getOneById('postform');
+		if (form) show = !!(
+			!form.getAttribute('style')
+		||	form.style.display === 'none'
+		);
+	}
+
 	if (show) {
 		toggle_display(false, 'toggle-postform-active');
 		toggle_display(true, 'toggle-postform-disabled', form || 'postform');
@@ -311,24 +315,21 @@ function on_page_open(e) {
 		} else {
 			var c = 0;
 		}
-		var h = h || c;
 		var o = {
 			'index-form-header' : 'Start a new thread'
 		,	'reply-form-header' : 'Write a reply'
 		};
-		var a = '<a href="javascript:toggle_postform()">';
-		var b = '</a>';
 		for (var k in o) if (e = getOneById(k)) {
 			d = getAllByTag('span',e)[0];
 			d.id = 'toggle-postform-disabled';
-			d.outerHTML += a+(d.innerHTML || (d.innerHTML = o[k]))+b;
+			d.outerHTML += '<a href="javascript:toggle_postform(true)">'+(d.innerHTML || (d.innerHTML = o[k]))+'</a>';
 
 			e = getAllByTag('a',e)[0];
 			e.id = 'toggle-postform-active';
 
 			d = cre('div',getAllByTag('tr',i)[0].lastElementChild);
 			d.className = 'postform-close';
-			d.innerHTML = '['+a+'x'+b+']';
+			d.innerHTML = '[<a href="javascript:toggle_postform(false)">x</a>]';
 
 			toggle_postform(!!c);
 
