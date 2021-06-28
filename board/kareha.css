@@ -20,7 +20,7 @@
 .userdelete {float: right; text-align: center; white-space: nowrap;}
 .warning {color: red;}
 body {margin: 0; padding: 12px; margin-bottom: auto;}
-code {white-space: pre; background-color: rgba(100, 40, 60, 0.1);}
+code {white-space: pre-wrap; background-color: rgba(100, 40, 60, 0.1);}
 form {margin-bottom: 0;}
 label[title] .postername::after {content: " [i] "; font-weight: normal;}
 ol, ul {list-style-position: inside; padding-left: 1em;}
