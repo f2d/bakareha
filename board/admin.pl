@@ -278,7 +278,11 @@ elsif($list)
 }
 elsif($edit)
 {
-	die unless $query->param('admin') eq ENCODED_PASS;
+	die unless (
+		(ENCODED_PASS eq $pass)
+	or	(ENCODED_PASS eq $query->param("admin"))
+	or	(ENCODED_PASS eq $query->param("adminpass"))
+	);
 
 	my $filename=$query->param("filename");
 	my $contents=$query->param("contents");
@@ -290,7 +294,11 @@ elsif($edit)
 }
 elsif($ban)
 {
-	die unless $query->param('admin') eq ENCODED_PASS;
+	die unless (
+		(ENCODED_PASS eq $pass)
+	or	(ENCODED_PASS eq $query->param("admin"))
+	or	(ENCODED_PASS eq $query->param("adminpass"))
+	);
 
 	my @ids=$query->multi_param("id");
 	my $reason=$query->param("reason");
