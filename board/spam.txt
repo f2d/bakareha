@@ -6,6 +6,7 @@
 .onx
 .pp.ru
 .zox
+/(^|[\/\s])(ko\.gl|getfto\.com|imgzmet\.com|piczhq\.com|piczlabs\.com|trypicz\.com|usefto\.com)($|[\/\s])/i
 /<\/a>.*\[\/url\]/is
 /\.php\?[a-zA-Z0-9_-]+\/[0-9]{5}\.html/
 /\[\/url\].*<\/a>/is
