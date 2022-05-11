@@ -8,7 +8,7 @@
 .footer {font-size: 12px; font-family: serif;}
 .highlight {background: #edc; color: #333; border: 2px dashed #e60;}
 .logo {clear: both; text-align: left; font-size: 2em; font-weight: bold; color: #ace;}
-.managehead {background: #eee; color: #024; padding: 0px;}
+.managehead {background: #e7e7e7; color: #024; padding: 0px;}
 .nothumb {background-color: #fff; border-style: dotted; margin: .3em .5em;}
 .oldpost {color: #c10; font-weight: bold;}
 .omittedposts {color: #666;}
@@ -19,10 +19,10 @@
 .posttitle {background: inherit; font-size: 1.2em; color: #024; font-weight: bold;}
 .reflink {font-size: .8em; font-weight: bold;}
 .reply blockquote {margin: .5em;}
-.reply, .theader, .passvalid {background: #eee; border: solid 1px #ccc; border-radius: 5px;}
+.reply, .theader, .passvalid {background: #e7e7e7; border: solid 1px transparent; /* border-radius: 5px; */}
 .reply, blockquote p {padding: 0; margin: 0;}
 .reply:target {background: #e5f5ff; border-style: dashed;}
-.row1, .row2 {background: #eee; color: #024;}
+.row1, .row2 {background: #e7e7e7; color: #024;}
 .row2 {background: #ccc;}
 .rules {font-size: 0.7em;}
 .spoiler, .spoiler a {background: #bbb; color: #bbb;}
