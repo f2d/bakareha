@@ -1257,10 +1257,19 @@ sub make_thumbnail($$$$$;$)
 	my $magickname=$filename;
 	$magickname.="[0]" if($magickname=~/\.gif$/);
 
-	$convert="convert" unless($convert);
-	`$convert -background none -flatten -size ${width}x${height} -geometry ${width}x${height}! -quality $quality $magickname $thumbnail`;
+	my $magick_args="-background none -flatten -size ${width}x${height} -geometry ${width}x${height}! -quality $quality $magickname $thumbnail";
 
-	return 1 unless($?);
+	if($convert)
+	{
+		`$convert $magick_args`;
+		return 1 unless($?);
+	} else {
+		`magick convert $magick_args`;
+		return 1 unless($?);
+
+		`convert $magick_args`;
+		return 1 unless($?);
+	}
 
 if (0) {# v DISABLED v	8x------	--------	--------	--------
 	# if that fails, try pnmtools instead
