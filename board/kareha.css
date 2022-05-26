@@ -16,6 +16,7 @@
 .reflink {white-space: nowrap; margin-right: 1ex;}
 .reply .filesize {margin-left: 1em;}
 .replypage .replylink, span.replylink, .de-parea .postform-close, .script-on #postform:not([style]) {display: none;}
+.theader > ul {text-align: left;}
 .thumb {border: none; float: left; margin: 2px 1em;}
 .userdelete {float: right; text-align: center; white-space: nowrap;}
 .warning {color: red;}

@@ -271,13 +271,13 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 use constant THREAD_HEAD_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
-<if !(ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES)>
-	<div class="replymode theader" id="reply-form-header">
+<if !(ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES) or $closed>
+	<div class="replymode theader closed">
 		<const S_THREAD_MODE>
 	</div>
 </if>
 
-<if ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES>
+<if (ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES) and !$closed>
 	<details>
 	<summary class="replymode theader" id="reply-form-header">
 		<const S_THREAD_MODE>: [<span><const S_WRITE_NEW_REPLY></span>]

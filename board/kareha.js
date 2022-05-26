@@ -288,7 +288,13 @@ function on_page_open(e) {
 	if (getOneById('de-pform')) {
 		return;
 	}
-	if (!getOneById('postform') && (i = getAllByTag('hr')) && (i = i[1])) {
+	if (
+		!getOneById('postform')
+	&&	(i = getAllByTag('hr'))
+	&&	(i = i[1])
+	&&	i.className
+	&&	i.className.indexOf('closed') < 0
+	) {
 		i.previousElementSibling.innerHTML = postform_fallback;
 	}
 	var d = document.body;
@@ -351,10 +357,10 @@ var captcha_key = make_password();
 var hash_prefix = '#i';
 var i = getOneById('postform');
 var postform_fallback = (i ? i.innerHTML : '') || (
-	'<table><tr><td><ul>'
-+	'<li>EN: If post form is not found here, try to disable your extensions/userscripts for this site.</li>'
-+	'<li>RU: Если нет формы отправки поста, отключите убравшие её расширения (например Куклоскрипт).</li>'
-+	'</ul></td></tr></table>'
+	'<ul>'
++		'<li>EN: If post form is not found here, try to disable your extensions/userscripts for this site.</li>'
++		'<li>RU: Если нет формы отправки поста, отключите убравшие её расширения (например Куклоскрипт).</li>'
++	'</ul>'
 );
 
 if (window.addEventListener) {
