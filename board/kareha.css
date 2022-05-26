@@ -24,3 +24,6 @@ code {white-space: pre-wrap; background-color: rgba(100, 40, 60, 0.1);}
 form {margin-bottom: 0;}
 label[title] .postername::after {content: " [i] "; font-weight: normal;}
 ol, ul {list-style-position: inside; padding-left: 1em;}
+summary {display: list-item;}
+summary.open-js {display: block;}
+summary:not(.open-js) {cursor: pointer;}

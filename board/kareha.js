@@ -320,18 +320,24 @@ function on_page_open(e) {
 		,	'reply-form-header' : 'Write a reply'
 		};
 		for (var k in o) if (e = getOneById(k)) {
-			d = getAllByTag('span',e)[0];
-			d.id = 'toggle-postform-disabled';
-			d.outerHTML += '<a href="javascript:toggle_postform(true)">'+(d.innerHTML || (d.innerHTML = o[k]))+'</a>';
 
-			e = getAllByTag('a',e)[0];
-			e.id = 'toggle-postform-active';
+			if ('HTMLDetailsElement' in window) {
+				getAllByTag('details',e).map(function(e) { e.open = !!c; });
+			} else {
+				d = getAllByTag('span',e)[0];
+				d.id = 'toggle-postform-disabled';
+				d.parentNode.className += ' open-js';
+				d.outerHTML += '<a href="javascript:toggle_postform(true)">'+(d.innerHTML || (d.innerHTML = o[k]))+'</a>';
 
-			d = cre('div',getAllByTag('tr',i)[0].lastElementChild);
-			d.className = 'postform-close';
-			d.innerHTML = '[<a href="javascript:toggle_postform(false)">x</a>]';
+				e = getAllByTag('a',e)[0];
+				e.id = 'toggle-postform-active';
 
-			toggle_postform(!!c);
+				d = cre('div',getAllByTag('tr',i)[0].lastElementChild);
+				d.className = 'postform-close';
+				d.innerHTML = '[<a href="javascript:toggle_postform(false)">x</a>]';
+
+				toggle_postform(!!c);
+			}
 
 			break;
 		}

@@ -110,7 +110,11 @@ use constant NORMAL_HEAD_INCLUDE => q{
 		<link rel="<if !$default>alternate </if>stylesheet" type="text/css" href="<var expand_filename_time($filename)>" title="<var $title>" />
 	</loop>
 
-	<script type="text/javascript">var style_cookie="<const STYLE_COOKIE>"; document.documentElement.className="script-on";</script>
+	<script type="text/javascript">
+		var style_cookie="<const STYLE_COOKIE>";
+		if ('HTMLDetailsElement' in window);
+		else document.documentElement.className="script-on";
+	</script>
 </head>
 <if $thread><body class="replypage"></if>
 <if !$thread><body class="mainpage"></if>
@@ -145,11 +149,18 @@ use constant NORMAL_FOOT_INCLUDE => include(INCLUDE_DIR."footer.html").q{
 
 use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
-<div class="replymode theader" id="index-form-header">
-	<const S_BOARD_MODE>: [<span><const S_WRITE_NEW_THREAD></span>]
-</div>
+<if !(ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES)>
+	<div class="replymode theader" id="index-form-header">
+		<const S_BOARD_MODE>
+	</div>
+</if>
 
 <if ALLOW_TEXT_THREADS or ALLOW_IMAGE_THREADS>
+	<details>
+	<summary class="replymode theader" id="index-form-header">
+		<const S_BOARD_MODE>: [<span><const S_WRITE_NEW_THREAD></span>]
+	</summary>
+
 	<div class="postarea">
 	<form id="postform" action="<var $self>" method="post" enctype="multipart/form-data">
 
@@ -194,7 +205,7 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 	<tr><td colspan="2">
 	<div class="rules">}.include(INCLUDE_DIR."rules.html").q{</div></td></tr>
-	</tbody></table></form></div>
+	</tbody></table></form></div></details>
 </if>
 
 <hr />
@@ -260,11 +271,18 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 use constant THREAD_HEAD_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
-<div class="replymode theader" id="reply-form-header">
-	<const S_THREAD_MODE>: [<span><const S_WRITE_NEW_REPLY></span>]
-</div>
+<if !(ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES)>
+	<div class="replymode theader" id="reply-form-header">
+		<const S_THREAD_MODE>
+	</div>
+</if>
 
 <if ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES>
+	<details>
+	<summary class="replymode theader" id="reply-form-header">
+		<const S_THREAD_MODE>: [<span><const S_WRITE_NEW_REPLY></span>]
+	</summary>
+
 	<div class="postarea">
 	<form id="postform" action="<var $self>" method="post" enctype="multipart/form-data">
 
@@ -310,7 +328,7 @@ use constant THREAD_HEAD_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 	<tr><td colspan="2">
 	<div class="rules">}.include(INCLUDE_DIR."rules.html").q{</div></td></tr>
-	</tbody></table></form></div>
+	</tbody></table></form></div></details>
 </if>
 
 <hr />
