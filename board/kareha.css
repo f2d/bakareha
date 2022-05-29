@@ -44,10 +44,11 @@ label[for*="check-details"]::before {
 input[id*="check-details"] +
 label[for*="check-details"]::before {
 	/* float: left; */
-	display: inline-block;
-	line-height: 1em;
-	height: 1em;
-	width: 1em;
+	/* display: inline-block; */
+	/* line-height: 1em; */
+	/* height: 1em; */
+	/* width: 1em; */
+	opacity: 0.5;
 }
 label[for*="check-details"] {
 	display: block;
