@@ -86,6 +86,8 @@ use constant S_DUPENAME => 'A file with the same name already exists.';		# Error
 use constant S_THREADCLOSED => 'This thread is closed.';			# Error message when posting in a legen^H^H^H^H^H closed thread
 use constant S_SPAMTRAP => 'Leave empty (spam trap): ';
 
+use constant USE_DETAILS_SUMMARY_TAGS => 0;
+
 
 
 #
@@ -112,8 +114,11 @@ use constant NORMAL_HEAD_INCLUDE => q{
 
 	<script type="text/javascript">
 		var style_cookie="<const STYLE_COOKIE>";
-		if ('HTMLDetailsElement' in window);
-		else document.documentElement.className="script-on";
+
+		<if USE_DETAILS_SUMMARY_TAGS>
+			if ('HTMLDetailsElement' in window);
+			else document.documentElement.className="script-on";
+		</if>
 	</script>
 </head>
 <if $thread><body class="replypage"></if>
@@ -156,12 +161,20 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 </if>
 
 <if ALLOW_TEXT_THREADS or ALLOW_IMAGE_THREADS>
-	<details>
-	<summary class="replymode theader" id="index-form-header">
-		<const S_BOARD_MODE>: [<span><const S_WRITE_NEW_THREAD></span>]
-	</summary>
+	<if USE_DETAILS_SUMMARY_TAGS>
+		<details>
+		<summary class="replymode theader" id="index-form-header">
+			<const S_BOARD_MODE>: [<span><const S_WRITE_NEW_THREAD></span>]
+		</summary>
+	</if>
 
 	<div class="postarea">
+	<if !USE_DETAILS_SUMMARY_TAGS>
+		<input id="check-details" type="checkbox" style="display:none" />
+		<label for="check-details" class="replymode theader" id="index-form-header">
+			<const S_BOARD_MODE>: [<span><const S_WRITE_NEW_THREAD></span>]
+		</label>
+	</if>
 	<form id="postform" action="<var $self>" method="post" enctype="multipart/form-data">
 
 	<input type="hidden" name="task" value="post" />
@@ -205,7 +218,11 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 	<tr><td colspan="2">
 	<div class="rules">}.include(INCLUDE_DIR."rules.html").q{</div></td></tr>
-	</tbody></table></form></div></details>
+	</tbody></table></form></div>
+
+	<if USE_DETAILS_SUMMARY_TAGS>
+		</details>
+	</if>
 </if>
 
 <hr />
@@ -278,12 +295,20 @@ use constant THREAD_HEAD_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 </if>
 
 <if (ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES) and !$closed>
-	<details>
-	<summary class="replymode theader" id="reply-form-header">
-		<const S_THREAD_MODE>: [<span><const S_WRITE_NEW_REPLY></span>]
-	</summary>
+	<if USE_DETAILS_SUMMARY_TAGS>
+		<details>
+		<summary class="replymode theader" id="reply-form-header">
+			<const S_THREAD_MODE>: [<span><const S_WRITE_NEW_REPLY></span>]
+		</summary>
+	</if>
 
 	<div class="postarea">
+	<if !USE_DETAILS_SUMMARY_TAGS>
+		<input id="check-details" type="checkbox" style="display:none" />
+		<label for="check-details" class="replymode theader" id="index-form-header">
+			<const S_THREAD_MODE>: [<span><const S_WRITE_NEW_REPLY></span>]
+		</label>
+	</if>
 	<form id="postform" action="<var $self>" method="post" enctype="multipart/form-data">
 
 	<input type="hidden" name="task" value="post" />
@@ -328,7 +353,11 @@ use constant THREAD_HEAD_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 	<tr><td colspan="2">
 	<div class="rules">}.include(INCLUDE_DIR."rules.html").q{</div></td></tr>
-	</tbody></table></form></div></details>
+	</tbody></table></form></div>
+
+	<if USE_DETAILS_SUMMARY_TAGS>
+		</details>
+	</if>
 </if>
 
 <hr />

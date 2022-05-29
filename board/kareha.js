@@ -2,6 +2,7 @@
 //* -------- functions: --------
 
 function is_ie() { return document.all && !document.opera; }
+
 function getAllByMethod(m,v,p) {
 	try {
 		var a = (p || document)[m](v);
@@ -14,6 +15,20 @@ function getAllByMethod(m,v,p) {
 function getAllByClass(v,p) { return getAllByMethod('getElementsByClassName',v,p); }
 function getAllByTag(v,p) { return getAllByMethod('getElementsByTagName',v,p); }
 function getOneById(i) { return document.getElementById(i); }
+
+function getParentByTagName(e, tagName) {
+	var p,t;
+
+	while (e) if (
+		(p = e.parentNode)
+	&&	(t = p.tagName)
+	&&	(t.toLowerCase() === tagName)
+	) {
+		return e;
+	} else {
+		e = p;
+	}
+}
 
 function toggle_display() {
 	for (var style, show, e, a = arguments, i = 0, k = a.length; i < k; i++) {
@@ -41,20 +56,49 @@ function toggle_display() {
 }
 
 function toggle_postform(show, form) {
-	if (typeof show === 'undefined') {
-		if (!form) form = getOneById('postform');
-		if (form) show = !!(
-			!form.getAttribute('style')
-		||	form.style.display === 'none'
-		);
-	}
+	var checkbox, wrapper;
 
-	if (show) {
-		toggle_display(false, 'toggle-postform-active');
-		toggle_display(true, 'toggle-postform-disabled', form || 'postform');
+	if (!form) form = getOneById('postform');
+
+	if (
+		'HTMLDetailsElement' in window
+	&&	(wrapper = getParentByTagName(form, 'details'))
+	) {
+		wrapper.open = (
+			typeof show === 'undefined'
+			? !wrapper.open
+			: !!show
+		);
+	} else
+	if (
+		(
+			(checkbox = form.previousElementSibling)
+		&&	(checkbox.type === 'checkbox')
+		) || (
+			(checkbox = form.parentNode.firstElementChild)
+		&&	(checkbox.type === 'checkbox')
+		)
+	) {
+		checkbox.checked = (
+			typeof show === 'undefined'
+			? !checkbox.checked
+			: !!show
+		);
 	} else {
-		toggle_display(false, 'toggle-postform-disabled', form || 'postform');
-		toggle_display(true, 'toggle-postform-active');
+		if (form && typeof show === 'undefined') {
+			show = !!(
+				!form.getAttribute('style')
+			||	form.style.display === 'none'
+			);
+		}
+
+		if (show) {
+			toggle_display(false, 'toggle-postform-active');
+			toggle_display(true, 'toggle-postform-disabled', form);
+		} else {
+			toggle_display(false, 'toggle-postform-disabled', form);
+			toggle_display(true, 'toggle-postform-active');
+		}
 	}
 }
 
@@ -145,7 +189,9 @@ function preview_post(formId,thread) {
 	x.onreadystatechange = function() {
 		if (x.readyState === 4) preview.innerHTML = x.responseText;
 	}
+
 	if (is_ie() || x.setRequestHeader) x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
 	x.send(url);
 }
 
@@ -172,7 +218,7 @@ function set_new_inputs(i) {
 }
 
 function set_delpass(i) {
-	with (getOneById(i)) password.value = get_cookie('password');
+	getOneById(i).password.value = get_cookie('password');
 }
 
 function make_password() {
@@ -180,13 +226,16 @@ function make_password() {
 	var pass = '';
 	var i = 8;
 	var j = chars.length;
+
 	while (i--) pass += chars[Math.floor(Math.random()*j)];
+
 	return pass;
 }
 
 function get_password(name) {
 	var pass = get_cookie(name);
 	if (pass) return pass;
+
 	return make_password();
 }
 
@@ -208,11 +257,13 @@ function get_cookie(name) {
 
 function set_cookie(name,value,days) {
 	var x = '';
+
 	if (days) {
 		var date = new Date();
 		date.setTime(date.getTime()+(days*24*60*60*1000));
 		x = '; expires='+date.toGMTString();
 	}
+
 	document.cookie = name+'='+value+x+'; path=/';
 }
 
@@ -228,10 +279,12 @@ function set_stylesheet(style_title) {
 	var a = getAllByTag('link');
 	var i = a.length;
 	var found = false;
+
 	while (i--) if ((att = attrs(a[i])).title && att.rel.indexOf('style') >= 0) {
 		a[i].disabled = true; //* <- IE needs this to work.
 		if (style_title === att.title) a[i].disabled = !(found = true);
 	}
+
 	if (!found) set_preferred_stylesheet();
 }
 
@@ -239,6 +292,7 @@ function set_preferred_stylesheet() {
 	var att;
 	var a = getAllByTag('link');
 	var i = a.length;
+
 	while (i--) if ((att = attrs(a[i])).title && att.rel.indexOf('style') >= 0) {
 		a[i].disabled = (att.rel.indexOf('alt') >= 0);
 	}
@@ -248,6 +302,7 @@ function get_active_stylesheet() {
 	var att;
 	var a = getAllByTag('link');
 	var i = a.length;
+
 	while (i--) if (!a[i].disabled && (att = attrs(a[i])).title && att.rel.indexOf('style') >= 0) {
 		return att.title;
 	}
@@ -257,9 +312,11 @@ function get_preferred_stylesheet() {
 	var att;
 	var a = getAllByTag('link');
 	var i = a.length;
+
 	while (i--) if ((att = attrs(a[i])).title && att.rel.indexOf('style') >= 0 && att.rel.indexOf('alt') < 0) {
 		return att.title;
 	}
+
 	return null;
 }
 
@@ -273,10 +330,12 @@ function on_page_open(e) {
 	if (style_cookie) {
 		set_stylesheet(get_cookie(style_cookie) || get_preferred_stylesheet());
 	}
+
 	var h = location.hash;
 	var a = getAllByClass('abbrev');
 	var i = a.length;
 	var b,c,e,p,t;
+
 	while (i--) if (
 		(e = a[i])
 	&&	(p = e.parentNode)
@@ -285,9 +344,11 @@ function on_page_open(e) {
 	) {
 		t.insertBefore(e, p.nextSibling);
 	}
+
 	if (getOneById('de-pform')) {
 		return;
 	}
+
 	if (
 		!getOneById('postform')
 	&&	(i = getAllByTag('hr'))
@@ -297,12 +358,14 @@ function on_page_open(e) {
 	) {
 		i.previousElementSibling.innerHTML = postform_fallback;
 	}
+
 	var d = document.body;
 	var i = getAllByTag('select');
 	var o = {
 		'postform': set_new_inputs
 	,	'delform': set_delpass
 	};
+
 	if (d.getAttribute('style')) d.setAttribute('style', '');
 	if (i.length) i[0].value = get_active_stylesheet();
 	for (var k in o) if (getOneById(k)) o[k](k);
@@ -321,15 +384,24 @@ function on_page_open(e) {
 		} else {
 			var c = 0;
 		}
+
 		var o = {
 			'index-form-header' : 'Start a new thread'
 		,	'reply-form-header' : 'Write a reply'
 		};
+
 		for (var k in o) if (e = getOneById(k)) {
 
-			if ('HTMLDetailsElement' in window) {
-				getAllByTag('details',e).map(function(e) { e.open = !!c; });
-			} else {
+			if (
+				('HTMLDetailsElement' in window)
+				|| (
+					(d = i.previousElementSibling)
+				&&	(d.type === 'checkbox')
+				) || (
+					(d = i.parentNode.firstElementChild)
+				&&	(d.type === 'checkbox')
+				)
+			); else {
 				d = getAllByTag('span',e)[0];
 				d.id = 'toggle-postform-disabled';
 				d.parentNode.className += ' open-js';
@@ -341,9 +413,9 @@ function on_page_open(e) {
 				d = cre('div',getAllByTag('tr',i)[0].lastElementChild);
 				d.className = 'postform-close';
 				d.innerHTML = '[<a href="javascript:toggle_postform(false)">x</a>]';
-
-				toggle_postform(!!c);
 			}
+
+			toggle_postform(!!c);
 
 			break;
 		}

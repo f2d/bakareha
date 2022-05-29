@@ -25,6 +25,31 @@ code {white-space: pre-wrap; background-color: rgba(100, 40, 60, 0.1);}
 form {margin-bottom: 0;}
 label[title] .postername::after {content: " [i] "; font-weight: normal;}
 ol, ul {list-style-position: inside; padding-left: 1em;}
-summary {display: list-item;}
-summary.open-js {display: block;}
-summary:not(.open-js) {cursor: pointer;}
+
+details > summary.open-js {display: block;}
+details > summary:not(.open-js) {cursor: pointer;}
+
+input[id*="check-details"],
+input[id*="check-details"]:not(:checked) ~ *:not([for*="check-details"]) {
+	display: none;
+}
+input[id*="check-details"]:not(:checked) +
+label[for*="check-details"]::before {
+	content: "\25B6";
+}
+input[id*="check-details"]:checked +
+label[for*="check-details"]::before {
+	content: "\25BC";
+}
+input[id*="check-details"] +
+label[for*="check-details"]::before {
+	/* float: left; */
+	display: inline-block;
+	line-height: 1em;
+	height: 1em;
+	width: 1em;
+}
+label[for*="check-details"] {
+	display: block;
+	cursor: pointer;
+}
