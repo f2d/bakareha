@@ -35,11 +35,11 @@ input[id*="check-details"]:not(:checked) ~ *:not([for*="check-details"]) {
 }
 input[id*="check-details"]:not(:checked) +
 label[for*="check-details"]::before {
-	content: "\25B6";
+	content: "►";
 }
 input[id*="check-details"]:checked +
 label[for*="check-details"]::before {
-	content: "\25BC";
+	content: "▼";
 }
 input[id*="check-details"] +
 label[for*="check-details"]::before {
