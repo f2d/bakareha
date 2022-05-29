@@ -1,18 +1,19 @@
-﻿#deletecontrols {float: right; text-align: right;}
-#deletecontrols input[type=text] {min-width: 24em;}
+﻿#deletecontrols input[type=text] {min-width: 24em;}
+#deletecontrols {float: right; text-align: right;}
 #threadlist a {display: block;}
 .deletebutton, .posttext input {display: none;}
 .login {text-align: center;}
-.post {border: 1px solid #79c; background: #e7e7ff; padding: 0; margin-bottom: 0.3em; clear: both;}
-.postcommands {margin: 0; padding: 3px; background: #ccddff; font-family: sans-serif;}
-.posttext a {color: #5ae;}
-.posttext a:hover {background: #5ae; color: #eef;}
+.post {border: 1px solid #79c; background: #cef; padding: 0; margin-bottom: 0.3em; clear: both;}
+.postcommands a, .threadcommands a {color: #942;}
+.postcommands a:hover, .threadcommands a:hover {background: #d13; color: #fed;}
+.postcommands {margin: 0; padding: 3px; background: #aef; font-family: sans-serif;}
+.posttext > a[target="_blank"] {display: inline-block; padding: 0.125em;}
 .posttext {padding: 0.5em 2em;}
-a {color: #702;}
-a:hover {background: #d13; color: #eef;}
+a {color: #25d;}
+a:hover {background: #5ae; color: #eef;}
 h2 a {text-decoration: none; color: #000;}
 h2 a:hover {text-decoration: underline;}
 h2 {font-size: 1.2em; margin: 2em 0 0.5em 0; padding: 0; font-family: sans-serif;}
 h3 {font-size: 1em; margin: 0; padding: 0px; font-family: sans-serif;}
-html, body {background: #eef;}
+html, body {background: #ace;}
 th {text-align: left;}
