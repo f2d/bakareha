@@ -229,7 +229,9 @@ use constant MAIN_PAGE_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 <form id="delform" action="<var $self>" method="post">
 
 <loop $threads>
-	<div id="thread-<var $thread>" class="thread">
+	<if !$closed><div id="thread-<var $thread>" class="thread"></if>
+	<if $closed><div id="thread-<var $thread>" class="thread closed"></if>
+
 	<div class="thread-state replylink">
 		<if $autosage>[<const S_AUTOSAGE>]</if>
 		<if $closed>[<const S_CLOSED>]</if>
@@ -290,7 +292,7 @@ use constant THREAD_HEAD_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 
 <if !(ALLOW_TEXT_REPLIES or ALLOW_IMAGE_REPLIES) or $closed>
 	<div class="replymode theader closed">
-		<const S_THREAD_MODE>
+		<const S_THREADCLOSED>
 	</div>
 </if>
 
@@ -363,7 +365,9 @@ use constant THREAD_HEAD_TEMPLATE => compile_template(NORMAL_HEAD_INCLUDE.q{
 <hr />
 <form id="delform" action="<var $self>" method="post">
 
-	<div id="thread-<var $thread>" class="thread">
+	<if !$closed><div id="thread-<var $thread>" class="thread"></if>
+	<if $closed><div id="thread-<var $thread>" class="thread closed"></if>
+
 	<a name="1"></a>
 	<if $autosage or $closed>
 		<div class="thread-state">

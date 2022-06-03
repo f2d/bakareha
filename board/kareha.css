@@ -17,40 +17,19 @@
 .reply .filesize {margin-left: 1em;}
 .replypage .replylink, span.replylink, .de-parea .postform-close, .script-on #postform:not([style]) {display: none;}
 .theader > ul {text-align: left;}
+.thread.closed .reflink a[href*="javascript:insert_reply"] {display: none;}
 .thumb {border: none; float: left; margin: 2px 1em;}
 .userdelete {float: right; text-align: center; white-space: nowrap;}
 .warning {color: red;}
 body {margin: 0; padding: 12px; margin-bottom: auto;}
 code {white-space: pre-wrap; background-color: rgba(100, 40, 60, 0.1);}
+details > summary.open-js, label[for*="check-details"] {display: block;}
+details > summary:not(.open-js), label {cursor: pointer;}
 form {margin-bottom: 0;}
+input[id*="check-details"] + label[for*="check-details"]::before {opacity: 0.5;}
+input[id*="check-details"], input[id*="check-details"]:not(:checked) ~ *:not([for*="check-details"]) {display: none;}
+input[id*="check-details"]:checked + label[for*="check-details"]::before {content: "▼";}
+input[id*="check-details"]:not(:checked) + label[for*="check-details"]::before {content: "►";}
+label:hover {background-color: #f5deb3;}
 label[title] .postername::after {content: " [i] "; font-weight: normal;}
 ol, ul {list-style-position: inside; padding-left: 1em;}
-
-details > summary.open-js {display: block;}
-details > summary:not(.open-js) {cursor: pointer;}
-
-input[id*="check-details"],
-input[id*="check-details"]:not(:checked) ~ *:not([for*="check-details"]) {
-	display: none;
-}
-input[id*="check-details"]:not(:checked) +
-label[for*="check-details"]::before {
-	content: "►";
-}
-input[id*="check-details"]:checked +
-label[for*="check-details"]::before {
-	content: "▼";
-}
-input[id*="check-details"] +
-label[for*="check-details"]::before {
-	/* float: left; */
-	/* display: inline-block; */
-	/* line-height: 1em; */
-	/* height: 1em; */
-	/* width: 1em; */
-	opacity: 0.5;
-}
-label[for*="check-details"] {
-	display: block;
-	cursor: pointer;
-}
