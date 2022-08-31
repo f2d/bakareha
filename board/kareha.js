@@ -70,7 +70,7 @@ function getFormattedTime(t, plain, only_ymd, for_filename) {
 		'<time datetime="'
 	+		(HIS ? YMD+'T'+HIS : YMD)
 	+		tz
-	+	'"title="'
+	+	'" title="'
 	+		getDayOfWeek(d)+', '
 	+		YMD+(HIS ? ' '+HIS : '')+', '
 	+		tz
