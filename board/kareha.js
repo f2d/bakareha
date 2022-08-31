@@ -13,8 +13,16 @@ function leftPad(n, len, pad) {
 }
 
 //* Accepts a Date object or date string that is recognized by the Date.parse() method
-//* https://stackoverflow.com/a/17964373
 function getDayOfWeek(date) {
+
+//* https://stackoverflow.com/a/27347503
+
+	if (date.toLocaleString) {
+		return date.toLocaleString(window.navigator.language, { weekday : 'long' });
+	}
+
+//* https://stackoverflow.com/a/17964373
+
 	var dayOfWeek = new Date(date).getDay();
 
 	return (
