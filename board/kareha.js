@@ -3,6 +3,60 @@
 
 function is_ie() { return document.all && !document.opera; }
 
+function orz(n) { return parseInt(n||0)||0; }
+function leftPad(n, len, pad) {
+	n = String(orz(n));
+	len = orz(len) || 2;
+	pad = String(pad || 0);
+	while (n.length < len) n = pad+n;
+	return n;
+}
+
+function getFormattedTimezoneOffset(t) {
+	return (
+		(t = (t && t.getTimezoneOffset ? t : new Date).getTimezoneOffset())
+		? (t < 0 ? (t = -t, '+') : '-')+leftPad(Math.floor(t/60))+':'+leftPad(t%60)
+		: 'Z'
+	);
+}
+
+function getFormattedTime(t, plain, only_ymd, for_filename) {
+	if (TOS.indexOf(typeof t) > -1) {
+		t = orz(t) * 1000;
+	}
+var	d = (
+		t
+		? new Date(t > 0 ? t : t + new Date)
+		: new Date
+	)
+,	t = (
+		('FullYear,Month,Date'+(only_ymd ? '' : ',Hours,Minutes,Seconds'))
+		.split(',')
+		.map(
+			function(v,i) {
+				v = d['get'+v]();
+				if (i == 1) ++v;
+				return leftPad(v);
+			}
+		)
+	)
+,	YMD = t.slice(0,3).join('-')
+,	HIS = t.slice(3).join(for_filename ? '-' : ':')
+	;
+	return (
+		plain
+		? YMD+(for_filename ? '_' : ' ')+HIS
+		: (
+			'<time datetime="'+YMD+'T'+HIS
+		+	getFormattedTimezoneOffset(t)
+		+	'" data-t="'+Math.floor(d / 1000)
+		+	'">'
+		+		YMD+' <small>'+HIS+'</small>'
+		+	'</time>'
+		)
+	);
+}
+
 function getAllByMethod(m,v,p) {
 	try {
 		var a = (p || document)[m](v);
@@ -420,10 +474,34 @@ function on_page_open(e) {
 			break;
 		}
 	}
+
+	var a = getAllByTag('span');
+	var t,e,i = a.length;
+
+	while (i--) if (
+		(e = a[i])
+	&&	(
+			(
+				t = e.time
+			||	e.getAttribute('time')
+			||	e.getAttribute('data-t')
+			||	e.getAttribute('data-time')
+			||	e.getAttribute('date-time')
+			) || (
+				(t = e.title)
+			&&	(t.slice(0,4) === 'GMT ')
+			&&	(t = Date.parse(t))
+			)
+		)
+	&&	t > 0
+	) {
+		e.outerHTML = getFormattedTime(t);
+	}
 }
 
 //* -------- runtime: --------
 
+var TOS = ['object','string']
 var style_cookie;
 var captcha_key = make_password();
 var hash_prefix = '#i';

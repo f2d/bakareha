@@ -859,9 +859,9 @@ sub make_date($$;@)
 	}
 	else
 	{
-		my ($sec,$min,$hour,$mday,$mon,$year,$wday)=localtime($time);
-		return sprintf("<span title=\"GMT %s\">%s %04d-%02d-%02d %02d:%02d:%02d</span>",
-		scalar(gmtime($time)),$days[$wday],$year+1900,$mon+1,$mday,$hour,$min,$sec);
+		my ($sec,$min,$hour,$mday,$mon,$year,$wday)=gmtime($time);
+		return sprintf("<span data-time=\"%s\">%04d-%02d-%02d, %s, %02d:%02d:%02d GMT</span>",
+		$time,$year+1900,$mon+1,$mday,$days[$wday],$hour,$min,$sec);
 	}
 }
 

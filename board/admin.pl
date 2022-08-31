@@ -121,7 +121,7 @@ Pages: <loop template_for("page",0,(scalar(@$threads)-1)/THREADS_DISPLAYED)>
 <a href="<var $self>?list">Thread list</a>
 </div>
 
-</body></html>
+</body><script type="text/javascript" src="<const expand_filename_time(JS_FILE)>" defer="defer"></script></html>
 });
 
 
@@ -174,7 +174,7 @@ use constant LIST_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{
 </loop>
 </tbody></table>
 
-</body></html>
+</body><script type="text/javascript" src="<const expand_filename_time(JS_FILE)>" defer="defer"></script></html>
 });
 
 use constant LOGIN_TEMPLATE => compile_template(ADMIN_HEAD_INCLUDE.q{

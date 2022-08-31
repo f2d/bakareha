@@ -30,6 +30,6 @@ input[id*="check-details"] + label[for*="check-details"]::before {opacity: 0.5;}
 input[id*="check-details"], input[id*="check-details"]:not(:checked) ~ *:not([for*="check-details"]) {display: none;}
 input[id*="check-details"]:checked + label[for*="check-details"]::before {content: "▼";}
 input[id*="check-details"]:not(:checked) + label[for*="check-details"]::before {content: "►";}
-label:hover {background-color: #f5deb3;}
+label:hover, details > summary:hover {background-color: #f5deb3;}
 label[title] .postername::after {content: " [i] "; font-weight: normal;}
 ol, ul {list-style-position: inside; padding-left: 1em;}
