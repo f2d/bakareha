@@ -12,6 +12,20 @@ function leftPad(n, len, pad) {
 	return n;
 }
 
+//* Accepts a Date object or date string that is recognized by the Date.parse() method
+//* https://stackoverflow.com/a/17964373
+function getDayOfWeek(date) {
+	var dayOfWeek = new Date(date).getDay();
+
+	return (
+		isNaN(dayOfWeek)
+		? null :
+		// ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+		['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+		[dayOfWeek]
+	);
+}
+
 function getFormattedTimezoneOffset(t) {
 	return (
 		(t = (t && t.getTimezoneOffset ? t : new Date).getTimezoneOffset())
@@ -24,12 +38,14 @@ function getFormattedTime(t, plain, only_ymd, for_filename) {
 	if (TOS.indexOf(typeof t) > -1) {
 		t = orz(t) * 1000;
 	}
-var	d = (
+
+	var d = (
 		t
 		? new Date(t > 0 ? t : t + new Date)
 		: new Date
-	)
-,	t = (
+	);
+
+	var t = (
 		('FullYear,Month,Date'+(only_ymd ? '' : ',Hours,Minutes,Seconds'))
 		.split(',')
 		.map(
@@ -39,21 +55,31 @@ var	d = (
 				return leftPad(v);
 			}
 		)
-	)
-,	YMD = t.slice(0,3).join('-')
-,	HIS = t.slice(3).join(for_filename ? '-' : ':')
-	;
+	);
+
+	var YMD = t.slice(0,3).join('-');
+	var HIS = (only_ymd ? '' : t.slice(3).join(for_filename ? '-' : ':'));
+
+	if (plain) {
+		return (HIS ? YMD+(for_filename ? '_' : ' ')+HIS : YMD);
+	}
+
+	var tz = getFormattedTimezoneOffset(t);
+
 	return (
-		plain
-		? YMD+(for_filename ? '_' : ' ')+HIS
-		: (
-			'<time datetime="'+YMD+'T'+HIS
-		+	getFormattedTimezoneOffset(t)
-		+	'" data-t="'+Math.floor(d / 1000)
-		+	'">'
-		+		YMD+' <small>'+HIS+'</small>'
-		+	'</time>'
-		)
+		'<time datetime="'
+	+		(HIS ? YMD+'T'+HIS : YMD)
+	+		tz
+	+	'"title="'
+	+		getDayOfWeek(d)+', '
+	+		YMD+(HIS ? ' '+HIS : '')+', '
+	+		tz
+	+	'" data-t="'
+	+		Math.floor(d / 1000)
+	+	'">'
+	+		YMD
+	+		(HIS ? ' <small>'+HIS+'</small>' : '')
+	+	'</time>'
 	);
 }
 
