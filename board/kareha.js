@@ -8,29 +8,38 @@ function leftPad(n, len, pad) {
 	n = String(orz(n));
 	len = orz(len) || 2;
 	pad = String(pad || 0);
+
 	while (n.length < len) n = pad+n;
+
 	return n;
 }
 
 //* Accepts a Date object or date string that is recognized by the Date.parse() method
-function getDayOfWeek(date) {
+function getWeekDayName(date) {
 
 //* https://stackoverflow.com/a/27347503
 
 	if (date.toLocaleString) {
-		return date.toLocaleString(window.navigator.language, { weekday : 'long' });
+		var weekDayName = date.toLocaleString(window.navigator.language, { weekday : 'long' });
+
+		if (
+			weekDayName.indexOf(' ') < 0
+		&&	weekDayName.indexOf(':') < 0
+		) {
+			return weekDayName;
+		}
 	}
 
 //* https://stackoverflow.com/a/17964373
 
-	var dayOfWeek = new Date(date).getDay();
+	var weekDayIndex = new Date(date).getDay();
 
 	return (
-		isNaN(dayOfWeek)
+		isNaN(weekDayIndex)
 		? null :
 		// ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 		['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-		[dayOfWeek]
+		[weekDayIndex]
 	);
 }
 
@@ -60,6 +69,7 @@ function getFormattedTime(t, plain, only_ymd, for_filename) {
 			function(v,i) {
 				v = d['get'+v]();
 				if (i == 1) ++v;
+
 				return leftPad(v);
 			}
 		)
@@ -79,7 +89,7 @@ function getFormattedTime(t, plain, only_ymd, for_filename) {
 	+		(HIS ? YMD+'T'+HIS : YMD)
 	+		tz
 	+	'" title="'
-	+		getDayOfWeek(d)+', '
+	+		getWeekDayName(d)+', '
 	+		YMD+(HIS ? ' '+HIS : '')+', '
 	+		tz
 	+	'" data-t="'
@@ -94,6 +104,7 @@ function getFormattedTime(t, plain, only_ymd, for_filename) {
 function getAllByMethod(m,v,p) {
 	try {
 		var a = (p || document)[m](v);
+
 		return Array.prototype.slice.call(a);
 	} catch (error) {
 		return a || [];
@@ -140,6 +151,7 @@ function toggle_display() {
 			style.display = (show_this ? '' : 'none');
 		}
 	}
+
 	return show;
 }
 
@@ -194,6 +206,7 @@ function cre(e,p,b) {
 	e = document.createElement(e);
 	if (b) p.insertBefore(e, b); else
 	if (p) p.appendChild(e);
+
 	return e;
 }
 
@@ -339,6 +352,7 @@ function get_cookie(name) {
 	with (document.cookie) {
 		var regexp = new RegExp('(^|;\\s+)'+name+'=(.*?)(;|$)');
 		var hit = regexp.exec(document.cookie);
+
 		return (hit && hit.length > 2) ? unescape(hit[2]) : '';
 	}
 };
