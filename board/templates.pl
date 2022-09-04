@@ -38,7 +38,6 @@ use constant S_HIDDEN => 'Thumbnail hidden, click filename to see the image.';	#
 use constant S_NOTHUMB => 'No<br />thumbnail';					# Printed when there's no thumbnail
 use constant S_PICNAME => 'File: ';						# Prints text before upload name/link
 use constant S_FULLTHREAD => 'View thread';					# Prints text for full thread link
-use constant S_REPLY => '&lt;&lt;';						# Prints text for reply link
 use constant S_ABBR => '%d posts omitted.';					# Prints text to be shown when replies are hidden
 use constant S_ABBRIMG => '%d posts and %d images omitted.';			# Prints text to be shown when replies and images are hidden
 use constant S_ABBRTHREAD => 'Click <a href="%s">here</a> to view full thread.';
@@ -457,7 +456,6 @@ use constant REPLY_TEMPLATE => compile_template( q{
 
 	<span class="reflink">
 		<a href="<var get_thread_filename($thread)>#<var $num>">#<var $num></a>
-		<a href="javascript:insert_reply('&gt;&gt;<var $num>','<var get_thread_filename($thread)>')"><const S_REPLY></a>
 	</span>
 	<span class="replylink">
 		[<a href="<var get_thread_filename($thread)>"><const S_FULLTHREAD></a>]
@@ -498,7 +496,6 @@ use constant REPLY_TEMPLATE => compile_template( q{
 
 	<span class="reflink">
 		<a href="<var get_thread_filename($thread)>#<var $num>">#<var $num></a>
-		<a href="javascript:insert_reply('&gt;&gt;<var $num>','<var get_thread_filename($thread)>')"><const S_REPLY></a>
 	</span>
 
 	<if $image>

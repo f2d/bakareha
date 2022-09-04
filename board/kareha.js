@@ -202,13 +202,16 @@ function toggle_postform(show, form) {
 	}
 }
 
-function cre(e,p,b) {
-	e = document.createElement(e);
+function crf(f,e,p,b) {
+	e = f(e);
 	if (b) p.insertBefore(e, b); else
 	if (p) p.appendChild(e);
 
 	return e;
 }
+
+function cre(tagName,     p,b) { return crf(document.createElement, tagName); }
+function crt(textContent, p,b) { return crf(document.createTextNode, textContent); }
 
 function reply_insert(text,thread) {
 	var postForm = getOneById('postform');
@@ -522,7 +525,6 @@ function on_page_open(e) {
 			break;
 		}
 	}
-
 	var a = getAllByTag('span');
 	var t,e,i = a.length;
 
@@ -545,10 +547,44 @@ function on_page_open(e) {
 	) {
 		e.outerHTML = getFormattedTime(t);
 	}
+
+	var a = getAllByClass('reflink');
+	var p,f,h,e,i = a.length;
+
+	var postLinkHint = (
+		isLangRu
+		? 'Ссылка на этот пост'
+		: 'Link to this post'
+	);
+
+	var replyHint = (
+		isLangRu
+		? 'Ответить на этот пост'
+		: 'Reply to this post'
+	);
+
+	while (i--) if (
+		(p = a[i])
+	&&	(f = p.firstElementChild)
+	&&	(e = p.lastElementChild)
+	&&	(h = f.href)
+	&&	h.indexOf('#') >= 0
+	) {
+		if (f === e) {
+			h = h.split('#');
+			crt(' ', p);
+			e = cre('a', p);
+			e.href = "javascript:insert_reply('>>"+h[1]+"','"+h[0]+"')";
+			e.textContent = '<<';
+		}
+		f.title = postLinkHint;
+		e.title = replyHint;
+	}
 }
 
 //* -------- runtime: --------
 
+var isLangRu = (window.navigator.language.indexOf('ru') === 0);
 var TOS = ['object','string']
 var style_cookie;
 var captcha_key = make_password();
