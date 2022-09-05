@@ -202,16 +202,15 @@ function toggle_postform(show, form) {
 	}
 }
 
-function crf(f,e,p,b) {
-	e = f(e);
+function insertCreatedElement(e,p,b) {
 	if (b) p.insertBefore(e, b); else
 	if (p) p.appendChild(e);
 
 	return e;
 }
 
-function cre(tagName,     p,b) { return crf(document.createElement, tagName); }
-function crt(textContent, p,b) { return crf(document.createTextNode, textContent); }
+function cre(tagName,     p,b) { return insertCreatedElement(document.createElement(tagName),      p,b); }
+function crt(textContent, p,b) { return insertCreatedElement(document.createTextNode(textContent), p,b); }
 
 function reply_insert(text,thread) {
 	var postForm = getOneById('postform');
