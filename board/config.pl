@@ -170,7 +170,7 @@ use constant FILETYPES => (
 	#	jpg => '.',
 	#	png => '.',
 	},
-	'~' => {
+	'' => {
 	#	swf => 'icons/flash.png',
 	#	torrent => 'icons/torrent.png',
 	},

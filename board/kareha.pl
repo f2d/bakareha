@@ -1323,7 +1323,8 @@ sub get_supported_filetypes()
 	my %filetypes=FILETYPES;
 
 	if (exists $filetypes{'image'}) {
-		my @text_parts=();
+		my @typed_parts=();
+		my @untyped_parts=();
 		
 		foreach my $ext ('gif', 'jpg', 'png') {
 			$filetypes{'image'}{$ext}=1 unless exists $filetypes{'image'}{$ext};
@@ -1334,12 +1335,15 @@ sub get_supported_filetypes()
 			my $text=join ", ", map { uc } sort keys %group;
 
 			if (length($text)) {
-				$text .= " ($group_name)" if length($group_name) and ($group_name=~/\w/);
-				push @text_parts, $text;
+				if (length($group_name)) {
+					push @typed_parts, "$text ($group_name)";
+				} else {
+					push @untyped_parts, $text;
+				}
 			}
 		}
 	
-		return join ", ", @text_parts;
+		return join ", ", (@typed_parts, @untyped_parts);
 	} else {
 		foreach my $ext ('gif', 'jpg', 'png') {
 			$filetypes{$ext}=1 unless $filetypes{$ext};
