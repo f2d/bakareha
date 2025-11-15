@@ -1,6 +1,6 @@
 ﻿#
 # Example config file.
-# 
+#
 # Uncomment and edit the options you want to specifically change from the
 # default values. You must specify ADMIN_PASS and SECRET.
 #
@@ -138,37 +138,42 @@ use constant FAVICON => 'icon.png';		# Path to the favicon for the board
 # Icons for filetypes - file extensions specified here will get icons and keep original filenames
 # (except for the built-in image formats).
 use constant FILETYPES => (
-# # Audio files
-#	mp3 => 'icons/audio-mp3.png',
-#	ogg => 'icons/audio-ogg.png',
-#	aac => 'icons/audio-aac.png',
-#	m4a => 'icons/audio-aac.png',
-#	mpc => 'icons/audio-mpc.png',
-#	mpp => 'icons/audio-mpp.png',
-#	mod => 'icons/audio-mod.png',
-#	it => 'icons/audio-it.png',
-#	xm => 'icons/audio-xm.png',
-#	fla => 'icons/audio-flac.png',
-#	flac => 'icons/audio-flac.png',
-#	sid => 'icons/audio-sid.png',
-#	mo3 => 'icons/audio-mo3.png',
-#	spc => 'icons/audio-spc.png',
-#	nsf => 'icons/audio-nsf.png',
-# # Archive files
-	zip => 'icons/archive-zip.png',
-	rar => 'icons/archive-rar.png',
-#	lzh => 'icons/archive-lzh.png',
-#	lha => 'icons/archive-lzh.png',
-	gz => 'icons/archive-gz.png',
-	bz2 => 'icons/archive-bz2.png',
-	'7z' => 'icons/archive-7z.png',
-#	# Other files
-#	swf => 'icons/flash.png',
-#	torrent => 'icons/torrent.png',
-#	# To stop Wakaba from renaming image files, put their names in here like this:
-#	gif => '.',
-#	jpg => '.',
-#	png => '.',
+	audio => {
+	#	aac => 'icons/audio-aac.png',
+	#	m4a => 'icons/audio-aac.png',
+	#	mp3 => 'icons/audio-mp3.png',
+	#	ogg => 'icons/audio-ogg.png',
+	#	fla => 'icons/audio-flac.png',
+	#	flac => 'icons/audio-flac.png',
+	#	mo3 => 'icons/audio-mo3.png',
+	#	mod => 'icons/audio-mod.png',
+	#	mpc => 'icons/audio-mpc.png',
+	#	mpp => 'icons/audio-mpp.png',
+	#	nsf => 'icons/audio-nsf.gif',
+	#	sid => 'icons/audio-sid.png',
+	#	spc => 'icons/audio-spc.png',
+	#	xm => 'icons/audio-xm.png',
+	#	it => 'icons/audio-it.png',
+	},
+	archive => {
+		'7z' => 'icons/archive-7z.png',
+		bz2 => 'icons/archive-bz2.png',
+		gz => 'icons/archive-gz.png',
+	#	lha => 'icons/archive-lzh.png',
+	#	lzh => 'icons/archive-lzh.png',
+		rar => 'icons/archive-rar.png',
+		zip => 'icons/archive-zip.png',
+	},
+	image => {
+	# To stop Wakaba from renaming image files, put their names in here like this:
+	#	gif => '.',
+	#	jpg => '.',
+	#	png => '.',
+	},
+	'~' => {
+	#	swf => 'icons/flash.png',
+	#	torrent => 'icons/torrent.png',
+	},
 );
 
 # Allowed HTML tags and attributes. Sort of undocumented for now, but feel free to

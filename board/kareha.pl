@@ -1096,12 +1096,6 @@ sub in_range($$)
 	return 0;
 }
 
-sub update_thread($)
-{
-	my $thread=shift;
-
-}
-
 sub write_thread($)
 {
 	my $thread=shift;
@@ -1298,7 +1292,7 @@ sub check_admin_pass($)
 sub encode_admin_pass($)
 {
 	my $crypt=hide_data((shift).$ENV{REMOTE_ADDR},9,"admin",SECRET,1);
-	$crypt=~tr/+/./; # for web shit
+	$crypt=~tr/+/./; # for web
 	return $crypt;
 }
 
@@ -1324,17 +1318,48 @@ sub make_error($)
 # Image handling
 #
 
-sub get_filetypes()
+sub get_supported_filetypes()
 {
 	my %filetypes=FILETYPES;
-	$filetypes{gif}=$filetypes{jpg}=$filetypes{png}=1;
-	return join ", ",map { uc } sort keys %filetypes;
+	my @text_parts=();
+
+	foreach my $ext ('gif', 'jpg', 'png') {
+		$filetypes{'image'}{$ext}=1 unless exists $filetypes{'image'}{$ext};
+	}
+
+	foreach my $group_name (sort keys %filetypes) {
+		my %group=%{$filetypes{$group_name}};
+		my $text=join ", ", map { uc } sort keys %group;
+
+		if (length($text)) {
+			$text .= " ($group_name)" if length($group_name) and ($group_name=~/\w/);
+			push @text_parts, $text;
+		}
+	}
+
+	return join ", ", @text_parts;
+}
+
+sub get_default_thumbnails_by_filetypes()
+{
+	my %filetypes=FILETYPES;
+	my %merged=();
+
+	foreach my $group_name (keys %filetypes) {
+		my %group=%{$filetypes{$group_name}};
+
+		foreach my $ext (keys %group) {
+			$merged{$ext} = $group{$ext};
+		}
+	}
+
+	return %merged;
 }
 
 sub process_file($$)
 {
 	my ($file,$time)=@_;
-	my %filetypes=FILETYPES;
+	my %filetypes=get_default_thumbnails_by_filetypes();
 
 	# find out the file size
 	my $size=-s $file;
