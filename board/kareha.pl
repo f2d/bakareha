@@ -1321,39 +1321,53 @@ sub make_error($)
 sub get_supported_filetypes()
 {
 	my %filetypes=FILETYPES;
-	my @text_parts=();
 
-	foreach my $ext ('gif', 'jpg', 'png') {
-		$filetypes{'image'}{$ext}=1 unless exists $filetypes{'image'}{$ext};
-	}
-
-	foreach my $group_name (sort keys %filetypes) {
-		my %group=%{$filetypes{$group_name}};
-		my $text=join ", ", map { uc } sort keys %group;
-
-		if (length($text)) {
-			$text .= " ($group_name)" if length($group_name) and ($group_name=~/\w/);
-			push @text_parts, $text;
+	if (exists $filetypes{'image'}) {
+		my @text_parts=();
+		
+		foreach my $ext ('gif', 'jpg', 'png') {
+			$filetypes{'image'}{$ext}=1 unless exists $filetypes{'image'}{$ext};
 		}
-	}
+		
+		foreach my $group_name (sort keys %filetypes) {
+			my %group=%{$filetypes{$group_name}};
+			my $text=join ", ", map { uc } sort keys %group;
 
-	return join ", ", @text_parts;
+			if (length($text)) {
+				$text .= " ($group_name)" if length($group_name) and ($group_name=~/\w/);
+				push @text_parts, $text;
+			}
+		}
+	
+		return join ", ", @text_parts;
+	} else {
+		foreach my $ext ('gif', 'jpg', 'png') {
+			$filetypes{$ext}=1 unless $filetypes{$ext};
+		}
+		
+		return join ", ", map { uc } sort keys %filetypes;
+	}
 }
 
 sub get_default_thumbnails_by_filetypes()
 {
 	my %filetypes=FILETYPES;
-	my %merged=();
+	
+	if (exists $filetypes{'image'}) {
+		my %merged=();
 
-	foreach my $group_name (keys %filetypes) {
-		my %group=%{$filetypes{$group_name}};
+		foreach my $group_name (keys %filetypes) {
+			my %group=%{$filetypes{$group_name}};
 
-		foreach my $ext (keys %group) {
-			$merged{$ext} = $group{$ext};
+			foreach my $ext (keys %group) {
+				$merged{$ext} = $group{$ext};
+			}
 		}
-	}
 
-	return %merged;
+		return %merged;
+	} else {
+		return %filetypes;
+	}
 }
 
 sub process_file($$)
