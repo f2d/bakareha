@@ -552,11 +552,14 @@ sub format_comment($$$;%)
 		if ($format_options{relative_local_links}) {
 			my $d=$ENV{HTTP_HOST};
 
-			# this server name, IP or domain: replace dots with character-class dots
-			$d=~s!\.![.]!g;
+			# if no local host in http request, link domain would become local folder with single slash without protocol.
+			if ($d) {
+				# this server name, IP or domain: replace dots with character-class dots
+				$d=~s!\.![.]!g;
 
-			# make local links root-relative: replace this server name with a single slash
-			$comment=~s!(<a\s+[^>]*?\bhref=")\w+:/+$d/+!$1/!gi;
+				# make local links root-relative: replace this server name with a single slash
+				$comment=~s!(<a\s+[^>]*?\bhref=")\w+:/+$d/+!$1/!gi;
+			}
 		}
 	}
 
@@ -1325,11 +1328,11 @@ sub get_supported_filetypes()
 	if (exists $filetypes{'image'}) {
 		my @typed_parts=();
 		my @untyped_parts=();
-		
+
 		foreach my $ext ('gif', 'jpg', 'png') {
 			$filetypes{'image'}{$ext}=1 unless exists $filetypes{'image'}{$ext};
 		}
-		
+
 		foreach my $group_name (sort keys %filetypes) {
 			my %group=%{$filetypes{$group_name}};
 			my $text=join ", ", map { uc } sort keys %group;
@@ -1342,13 +1345,13 @@ sub get_supported_filetypes()
 				}
 			}
 		}
-	
+
 		return join ", ", (@typed_parts, @untyped_parts);
 	} else {
 		foreach my $ext ('gif', 'jpg', 'png') {
 			$filetypes{$ext}=1 unless $filetypes{$ext};
 		}
-		
+
 		return join ", ", map { uc } sort keys %filetypes;
 	}
 }
@@ -1356,7 +1359,7 @@ sub get_supported_filetypes()
 sub get_default_thumbnails_by_filetypes()
 {
 	my %filetypes=FILETYPES;
-	
+
 	if (exists $filetypes{'image'}) {
 		my %merged=();
 
